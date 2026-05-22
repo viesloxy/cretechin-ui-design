@@ -25,14 +25,14 @@ export default function MarqueeText() {
     animation.current = animate(
       scope.current,
       { x: "-50%" },
-      { duration: 40, ease: "linear", repeat: Infinity }
+      { duration: 30, ease: "linear", repeat: Infinity }
     );
   }, [animate, scope]);
 
   useEffect(() => {
     if (animation.current) {
       if (isHovered) {
-        animation.current.speed = 0.3;
+        animation.current.speed = 0.5;
       } else {
         animation.current.speed = 1;
       }
@@ -52,7 +52,8 @@ export default function MarqueeText() {
           <div key={repeatIndex} className="flex items-center gap-16">
             {marqueeItems.map((item, index) => (
               <div key={`${repeatIndex}-${index}`} className="flex items-center gap-16">
-                <span className="text-2xl md:text-3xl lg:text-4xl font-medium text-neutral-400 dark:text-white/60 group-hover:text-primary transition-colors duration-300">
+                <span className="text-[#FFFF00] text-6xl md:text-7xl lg:text-8xl">&#10038;</span>
+                <span className="text-6xl md:text-7xl lg:text-8xl font-medium text-neutral-400 dark:text-white/60 group-hover:text-primary transition-colors duration-300">
                   {item}
                 </span>
               </div>

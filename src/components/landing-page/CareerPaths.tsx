@@ -13,8 +13,6 @@ const careerPaths = [
     skills: 12,
     courses: 24,
     icon: Code,
-    color: "text-blue-500",
-    bgColor: "bg-blue-500/10",
   },
   {
     id: 2,
@@ -23,18 +21,14 @@ const careerPaths = [
     skills: 8,
     courses: 18,
     icon: Palette,
-    color: "text-pink-500",
-    bgColor: "bg-pink-500/10",
   },
   {
     id: 3,
     title: "Backend Developer",
-    description: "Bangunan server-side applications dengan Node.js, Python, dan database management",
+    description: "Bangun server-side applications dengan Node.js, Python, dan database management",
     skills: 10,
     courses: 20,
     icon: Database,
-    color: "text-green-500",
-    bgColor: "bg-green-500/10",
   },
   {
     id: 4,
@@ -43,8 +37,6 @@ const careerPaths = [
     skills: 7,
     courses: 15,
     icon: TrendingUp,
-    color: "text-orange-500",
-    bgColor: "bg-orange-500/10",
   },
   {
     id: 5,
@@ -53,8 +45,6 @@ const careerPaths = [
     skills: 9,
     courses: 16,
     icon: Briefcase,
-    color: "text-purple-500",
-    bgColor: "bg-purple-500/10",
   },
   {
     id: 6,
@@ -63,8 +53,6 @@ const careerPaths = [
     skills: 6,
     courses: 12,
     icon: Megaphone,
-    color: "text-cyan-500",
-    bgColor: "bg-cyan-500/10",
   },
 ];
 
@@ -125,8 +113,8 @@ export default function CareerPaths() {
                 <Card className="h-full group cursor-pointer p-6 rounded-2xl border-black/5 dark:border-white/5 hover:border-primary/30 transition-all duration-300">
                   <div className="flex flex-col h-full">
                     {/* Icon */}
-                    <div className={`w-14 h-14 ${path.bgColor} rounded-xl flex items-center justify-center mb-5`}>
-                      <path.icon className={`w-7 h-7 ${path.color}`} />
+                    <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-5">
+                      <path.icon className="w-7 h-7 text-primary" />
                     </div>
 
                     {/* Title */}

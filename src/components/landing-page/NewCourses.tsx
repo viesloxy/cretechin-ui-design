@@ -141,7 +141,7 @@ export default function NewCourses() {
                   {/* Content */}
                   <div className="p-5">
                     {/* Category */}
-                    <p className="text-xs font-semibold text-primary mb-2">
+                    <p className="text-xs font-semibold text-yellow-400 mb-2">
                       {course.category}
                     </p>
 
