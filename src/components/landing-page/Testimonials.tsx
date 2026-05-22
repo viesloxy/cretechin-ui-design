@@ -112,27 +112,6 @@ export default function Testimonials() {
             </motion.div>
           ))}
         </motion.div>
-
-        {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6"
-        >
-          {[
-            { value: "1.000+", label: "Pengguna Aktif" },
-            { value: "500+", label: "Proyek Dibuat" },
-            { value: "98%", label: "Tingkat Kepuasan" },
-            { value: "4.9", label: "Rating Aplikasi" },
-          ].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <p className="text-3xl md:text-4xl font-medium text-primary">{stat.value}</p>
-              <p className="text-sm mt-1 text-neutral-600 dark:text-white/50">{stat.label}</p>
-            </div>
-          ))}
-        </motion.div>
       </div>
     </section>
   );

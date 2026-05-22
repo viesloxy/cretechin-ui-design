@@ -25,7 +25,7 @@ export default function MarqueeText() {
     animation.current = animate(
       scope.current,
       { x: "-50%" },
-      { duration: 30, ease: "linear", repeat: Infinity }
+      { duration: 120, ease: "linear", repeat: Infinity }
     );
   }, [animate, scope]);
 
@@ -41,26 +41,28 @@ export default function MarqueeText() {
 
   return (
     <section className="py-16 overflow-hidden border-y border-primary/20">
-      <motion.div
-        ref={scope}
-        animate={{ x: "-50%" }}
-        className="flex gap-16 whitespace-nowrap group cursor-pointer"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {Array.from({ length: 2 }).map((_, repeatIndex) => (
-          <div key={repeatIndex} className="flex items-center gap-16">
-            {marqueeItems.map((item, index) => (
-              <div key={`${repeatIndex}-${index}`} className="flex items-center gap-16">
-                <span className="text-[#FFFF00] text-6xl md:text-7xl lg:text-8xl">&#10038;</span>
-                <span className="text-6xl md:text-7xl lg:text-8xl font-medium text-neutral-400 dark:text-white/60 group-hover:text-primary transition-colors duration-300">
-                  {item}
-                </span>
-              </div>
-            ))}
-          </div>
-        ))}
-      </motion.div>
+      <div className="overflow-x-clip p-4 flex">
+        <motion.div
+          ref={scope}
+          animate={{ x: "-50%" }}
+          className="flex flex-none gap-16 pr-16 text-7xl md:text-8xl font-medium text-neutral-400 dark:text-white/60 group cursor-pointer"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {Array.from({ length: 10 }).map((_, repeatIndex) => (
+            <div key={repeatIndex} className="flex items-center gap-16">
+              {marqueeItems.map((item, index) => (
+                <div key={`${repeatIndex}-${index}`} className="flex items-center gap-16">
+                  <span className="text-[#FFFF00] text-7xl md:text-8xl">&#10038;</span>
+                  <span className="group-hover:text-primary transition-colors duration-300">
+                    {item}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ))}
+        </motion.div>
+      </div>
     </section>
   );
 }

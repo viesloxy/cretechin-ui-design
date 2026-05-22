@@ -125,24 +125,20 @@ export default function NewCourses() {
               <Link href={`/courses/${course.id}`}>
                 <Card className="h-full group cursor-pointer p-0 rounded-2xl border-black/5 dark:border-white/5 hover:border-primary/30 transition-all duration-300 overflow-hidden" padding="none">
                   {/* Image */}
-                  <div className="relative aspecrflow-hidden">
+                  <div className="relative aspect-video overflow-hidden">
                     <Image
                       src={course.image}
                       alt={course.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    {/* Badge */}
-                    <div className={`absolute top-3 left-3 ${course.badgeColor} text-white text-xs font-semibold px-3 py-1 rounded-full`}>
-                      {course.badge}
-                    </div>
                   </div>
 
                   {/* Content */}
                   <div className="p-5">
-                    {/* Category */}
+                    {/* Badge */}
                     <p className="text-xs font-semibold text-yellow-400 mb-2">
-                      {course.category}
+                      {course.badge}
                     </p>
 
                     {/* Title */}
