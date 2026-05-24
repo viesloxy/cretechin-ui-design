@@ -93,7 +93,7 @@ export default function BerandaNavbar() {
                     <Link
                       key={link.href}
                       href={link.href}
-                      className={`text-xs font-medium transition-colors ${
+                      className={`text-sm font-medium transition-colors ${
                         isActive
                           ? "text-primary font-semibold"
                           : "text-neutral-600 dark:text-white/50 hover:text-primary"
