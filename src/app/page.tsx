@@ -7,6 +7,7 @@ import {
   LogoTicker,
   NewCourses,
   DigitalAssets,
+  Articles,
   CareerPaths,
   Statistics,
   Testimonials,
@@ -24,6 +25,7 @@ export default function Home() {
       <LogoTicker />
       <NewCourses />
       <DigitalAssets />
+      <Articles />
       <CareerPaths />
       <Statistics />
       <Testimonials />

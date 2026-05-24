@@ -5,6 +5,7 @@ export { default as MarqueeText } from "./MarqueeText";
 export { default as LogoTicker } from "./LogoTicker";
 export { default as NewCourses } from "./NewCourses";
 export { default as DigitalAssets } from "./DigitalAssets";
+export { default as Articles } from "./Articles";
 export { default as CareerPaths } from "./CareerPaths";
 export { default as Statistics } from "./Statistics";
 export { default as Testimonials } from "./Testimonials";
