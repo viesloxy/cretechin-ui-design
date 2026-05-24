@@ -12,7 +12,7 @@ function LoginContent() {
   const router = useRouter();
 
   useEffect(() => {
-    if (isAuthenticated && !isLoading) router.push("/dashboard");
+    if (isAuthenticated && !isLoading) router.push("/beranda");
   }, [isAuthenticated, isLoading, router]);
 
   if (isLoading) {

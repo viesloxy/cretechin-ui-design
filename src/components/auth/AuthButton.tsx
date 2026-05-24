@@ -15,7 +15,7 @@ const AuthButton = forwardRef<HTMLButtonElement, AuthButtonProps>(
         ref={ref}
         disabled={disabled || isLoading}
         className={twMerge(
-          `w-full bg-primary text-neutral-900 font-semibold rounded-full py-3 hover:shadow-lg hover:shadow-primary/30 active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2`,
+          `w-full bg-primary text-neutral-900 font-semibold rounded-full py-3 hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2`,
           className
         )}
         {...props}

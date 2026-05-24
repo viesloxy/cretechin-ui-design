@@ -5,11 +5,11 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import {
-  DashboardNavbar,
+  BerandaNavbar,
   WelcomeSection,
   CategoryFilter,
   Category,
-} from "@/components/dashboard";
+} from "@/components/beranda";
 import {
   NewCourses,
   DigitalAssets,
@@ -19,7 +19,7 @@ import {
   Footer,
 } from "@/components/landing-page";
 
-function DashboardContent() {
+function BerandaContent() {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState<Category>("all");
@@ -48,7 +48,7 @@ function DashboardContent() {
 
   return (
     <main className="min-h-screen bg-white dark:bg-black">
-      <DashboardNavbar />
+      <BerandaNavbar />
       <WelcomeSection />
       <CategoryFilter
         activeCategory={activeCategory}
@@ -64,10 +64,10 @@ function DashboardContent() {
   );
 }
 
-export default function DashboardPage() {
+export default function BerandaPage() {
   return (
     <AuthProvider>
-      <DashboardContent />
+      <BerandaContent />
     </AuthProvider>
   );
 }

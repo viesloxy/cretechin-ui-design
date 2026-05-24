@@ -29,10 +29,10 @@ const AuthInput = forwardRef<HTMLInputElement, AuthInputProps>(
           <input
             ref={ref}
             className={twMerge(
-              `w-full bg-white dark:bg-neutral-900 border text-neutral-900 dark:text-white placeholder:text-neutral-400 rounded-full outline-none transition-all`,
+              `w-full bg-white dark:bg-neutral-900 border text-neutral-900 dark:text-white placeholder:text-neutral-400 rounded-full outline-none transition-colors`,
               error
-                ? "border-[#FF5252] focus:border-[#FF5252] focus:ring-2 focus:ring-[#FF5252]/20"
-                : "border-black/10 dark:border-white/10 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                ? "border-[#FF5252] focus:border-[#FF5252]"
+                : "border-black/10 dark:border-white/10 focus:border-primary",
               prefixIcon ? "pl-12" : "pl-5",
               suffixIcon ? "pr-12" : "pr-5",
               "py-3",
