@@ -82,7 +82,7 @@ export default function BerandaNavbar() {
                     className="object-contain"
                   />
                 </div>
-                <span className="font-bold text-base text-black dark:text-white">CreTechin</span>
+                <span className="hidden md:block font-bold text-base text-black dark:text-white">CreTechin</span>
               </Link>
 
               {/* Desktop Navigation Links */}
@@ -108,17 +108,17 @@ export default function BerandaNavbar() {
               {/* Right Actions */}
               <div className="flex items-center gap-2 flex-shrink-0">
                 {/* Search Bar - Desktop */}
-                <div className="hidden md:flex items-center relative">
+                <div className="hidden lg:flex items-center relative">
                   <Search className="absolute left-4 w-4 h-4 text-neutral-400" />
                   <input
                     type="text"
                     placeholder="Cari kursus, aset, artikel..."
-                    className="w-64 pl-11 pr-4 py-2 rounded-full border border-black/10 dark:border-white/10 bg-neutral-100 dark:bg-neutral-900 text-sm focus:outline-none focus:border-primary transition-colors"
+                    className="w-56 xl:w-64 pl-11 pr-4 py-2 rounded-full border border-black/10 dark:border-white/10 bg-neutral-100 dark:bg-neutral-900 text-sm focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
 
-                {/* Search Icon - Mobile */}
-                <button className="md:hidden p-2 text-neutral-600 dark:text-white/50 hover:text-primary transition-colors">
+                {/* Search Icon - Mobile/Tablet */}
+                <button className="lg:hidden p-2 text-neutral-600 dark:text-white/50 hover:text-primary transition-colors">
                   <Search className="w-5 h-5" />
                 </button>
 
