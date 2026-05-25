@@ -24,7 +24,7 @@ import { useTheme } from "@/components/providers/ThemeProvider";
 
 const navLinks = [
   { label: "Beranda", href: "/beranda" },
-  { label: "Katalog", href: "/catalog" },
+  { label: "Katalog", href: "/products" },
   { label: "Kursus", href: "/courses" },
   { label: "Aset", href: "/marketplace" },
   { label: "Acara", href: "/events" },
