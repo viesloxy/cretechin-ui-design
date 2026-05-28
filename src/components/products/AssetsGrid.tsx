@@ -74,7 +74,7 @@ export default function AssetsGrid({ assets }: AssetsGridProps) {
       >
         {assets.map((asset) => (
           <motion.div key={asset.id} variants={cardVariants}>
-            <Link href={`/assets/${asset.id}`}>
+            <Link href={`/products/${asset.id}`}>
               <motion.div
                 whileHover={{ y: -4 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}

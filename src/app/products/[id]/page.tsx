@@ -24,7 +24,7 @@ import {
 interface MockProduct {
   id: string;
   title: string;
-  creator: { id: string; name: string };
+  creator: { id: string; name: string; isVerified: boolean };
   badge: string;
   images: string[];
   price: number;
@@ -58,7 +58,7 @@ interface MockRelatedProduct {
 const MOCK_PRODUCT: MockProduct = {
   id: "1",
   title: "Modern Dashboard UI Kit - Complete Edition",
-  creator: { id: "creator-1", name: "DesignStudio Pro" },
+  creator: { id: "creator-1", name: "DesignStudio Pro", isVerified: true },
   badge: "Populer",
   images: [
     "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&q=80",
@@ -183,7 +183,7 @@ const MOCK_RELATED_PRODUCTS: MockRelatedProduct[] = [
 
 /* ─────────────────────────── CONTENT ─────────────────────────── */
 
-function ProductDetailContent({ productId }: { productId: string }) {
+function ProductDetailContent() {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<ProductTabType>("description");
@@ -301,9 +301,10 @@ export default function ProductDetailPage({
 }: {
   params: { id: string };
 }) {
+  void params.id; // params available for future dynamic data fetching
   return (
     <AuthProvider>
-      <ProductDetailContent productId={params.id} />
+      <ProductDetailContent />
     </AuthProvider>
   );
 }

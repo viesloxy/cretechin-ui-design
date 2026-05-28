@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { ShoppingCart, Heart, Share2, Loader2 } from "lucide-react";
+import { ShoppingCart, Heart, Share2, Loader2, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 interface StickyPurchaseCardProps {
@@ -19,27 +18,8 @@ export default function StickyPurchaseCard({ product }: StickyPurchaseCardProps)
 
   const handleAddToCart = async () => {
     setIsAddingToCart(true);
-    // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 800));
     setIsAddingToCart(false);
-    // In real implementation: add to cart via context
-  };
-
-  const handleToggleWishlist = () => {
-    setIsWishlisted(!isWishlisted);
-  };
-
-  const handleShare = async () => {
-    if (navigator.share) {
-      await navigator.share({
-        title: product.title,
-        text: `Lihat produk ini: ${product.title}`,
-        url: window.location.href,
-      });
-    } else {
-      await navigator.clipboard.writeText(window.location.href);
-      // In real implementation: show toast notification
-    }
   };
 
   return (
@@ -54,39 +34,42 @@ export default function StickyPurchaseCard({ product }: StickyPurchaseCardProps)
         </div>
 
         {/* Primary CTA - Add to Cart */}
-        <motion.button
-          whileTap={{ scale: 0.97 }}
+        <button
           onClick={handleAddToCart}
           disabled={isAddingToCart}
-          className="w-full flex items-center justify-center gap-2 py-4 px-6 bg-primary hover:bg-primary-dark disabled:opacity-70 text-neutral-900 font-semibold rounded-full transition-colors shadow-lg shadow-primary/20"
+          className="w-full relative h-auto cursor-pointer rounded-full overflow-hidden outline-none transition-all duration-300 bg-primary hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isAddingToCart ? (
-            <>
-              <Loader2 className="w-5 h-5 animate-spin" />
-              <span>Memuat...</span>
-            </>
-          ) : (
-            <>
-              <ShoppingCart className="w-5 h-5" />
-              <span>Tambah ke Keranjang</span>
-            </>
-          )}
-        </motion.button>
+          <span className="absolute inset-0 bg-primary" />
+          <span className="relative z-10 flex items-center justify-center gap-2 px-8 py-3.5">
+            <span className="text-sm font-medium tracking-tight text-black">
+              {isAddingToCart ? "Memuat..." : "Tambah ke Keranjang"}
+            </span>
+            {!isAddingToCart && (
+              <span className="transition-all duration-500 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0">
+                <ShoppingCart className="w-4 h-4 text-black" />
+              </span>
+            )}
+            {isAddingToCart && <Loader2 className="w-4 h-4 animate-spin text-black" />}
+          </span>
+        </button>
 
         {/* Secondary CTA - Buy Now */}
         <Link href={`/checkout?product=${product.id}`} className="block">
-          <motion.button
-            whileTap={{ scale: 0.97 }}
-            className="w-full py-4 px-6 bg-transparent border-2 border-primary text-primary font-semibold rounded-full hover:bg-primary/10 transition-colors"
-          >
-            Beli Sekarang
-          </motion.button>
+          <button className="w-full relative h-auto cursor-pointer rounded-full border border-primary overflow-hidden outline-none transition-all duration-300 bg-transparent hover:bg-primary/10 disabled:opacity-50 disabled:cursor-not-allowed">
+            <span className="absolute inset-0 bg-transparent" />
+            <span className="relative z-10 flex items-center justify-center gap-2 px-8 py-3.5">
+              <span className="text-sm font-medium tracking-tight text-primary">
+                Beli Sekarang
+              </span>
+              <ArrowRight className="w-4 h-4 text-primary transition-transform duration-300 group-hover:translate-x-1" />
+            </span>
+          </button>
         </Link>
 
         {/* Wishlist & Share */}
         <div className="flex justify-center gap-6 pt-4 border-t border-black/5 dark:border-white/5">
           <button
-            onClick={handleToggleWishlist}
+            onClick={() => setIsWishlisted(!isWishlisted)}
             className={`flex items-center gap-2 text-sm transition-colors ${
               isWishlisted ? "text-error" : "text-neutral-600 dark:text-white/50 hover:text-error"
             }`}
@@ -96,7 +79,13 @@ export default function StickyPurchaseCard({ product }: StickyPurchaseCardProps)
             <span>Wishlist</span>
           </button>
           <button
-            onClick={handleShare}
+            onClick={async () => {
+              if (navigator.share) {
+                await navigator.share({ title: product.title, text: `Lihat produk ini: ${product.title}`, url: window.location.href });
+              } else {
+                await navigator.clipboard.writeText(window.location.href);
+              }
+            }}
             className="flex items-center gap-2 text-sm text-neutral-600 dark:text-white/50 hover:text-primary transition-colors"
             aria-label="Share product"
           >
@@ -115,24 +104,23 @@ export default function StickyPurchaseCard({ product }: StickyPurchaseCardProps)
               Rp {product.price.toLocaleString()}
             </p>
           </div>
-          <motion.button
-            whileTap={{ scale: 0.97 }}
+          <button
             onClick={handleAddToCart}
             disabled={isAddingToCart}
-            className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 bg-primary hover:bg-primary-dark disabled:opacity-70 text-neutral-900 font-semibold rounded-full transition-colors shadow-lg shadow-primary/20"
+            className="flex-1 relative h-auto cursor-pointer rounded-full overflow-hidden outline-none transition-all duration-300 bg-primary hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isAddingToCart ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Memuat...</span>
-              </>
-            ) : (
-              <>
-                <ShoppingCart className="w-4 h-4" />
-                <span>Tambah ke Keranjang</span>
-              </>
-            )}
-          </motion.button>
+            <span className="absolute inset-0 bg-primary" />
+            <span className="relative z-10 flex items-center justify-center gap-2 px-6 py-3.5">
+              <span className="text-sm font-medium tracking-tight text-black">
+                {isAddingToCart ? "Memuat..." : "Tambah ke Keranjang"}
+              </span>
+              {isAddingToCart ? (
+                <Loader2 className="w-4 h-4 animate-spin text-black" />
+              ) : (
+                <ShoppingCart className="w-4 h-4 text-black" />
+              )}
+            </span>
+          </button>
         </div>
       </div>
     </div>

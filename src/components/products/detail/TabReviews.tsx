@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { ThumbsUp, ThumbsDown, ChevronDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ThumbsUp, ThumbsDown, ChevronDown, Check } from "lucide-react";
 
 interface Review {
   id: string;
@@ -40,12 +40,96 @@ function getRelativeTime(dateStr: string): string {
   return `${Math.floor(diffDays / 365)} tahun yang lalu`;
 }
 
+interface DropdownProps {
+  label: string;
+  options: { value: string | number | null; label: string }[];
+  value: string | number | null;
+  onChange: (value: string | number | null) => void;
+  icon?: React.ReactNode;
+}
+
+function CustomDropdown({ label, options, value, onChange, icon }: DropdownProps) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  const currentLabel = options.find((o) => o.value === value)?.label ?? label;
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-2 pl-4 pr-3 py-2 rounded-full border border-black/10 dark:border-white/10 bg-white dark:bg-neutral-900 text-sm text-neutral-600 dark:text-white/50 hover:border-primary/50 transition-colors whitespace-nowrap"
+      >
+        {icon}
+        <span>{currentLabel}</span>
+        <motion.div
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <ChevronDown className="w-4 h-4 text-neutral-400" />
+        </motion.div>
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: -4 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -4 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className="absolute left-0 sm:left-auto sm:right-0 mt-2 w-44 bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/5 rounded-xl shadow-lg overflow-hidden z-20"
+          >
+            {options.map((option) => (
+              <button
+                key={String(option.value)}
+                onClick={() => { onChange(option.value); setOpen(false); }}
+                className={`w-full flex items-center justify-between gap-2 px-4 py-2.5 text-sm text-left transition-colors ${
+                  option.value === value
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "text-neutral-600 dark:text-white/50 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                }`}
+              >
+                <span>{option.label}</span>
+                {option.value === value && <Check className="w-4 h-4 text-primary flex-shrink-0" />}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function TabReviews({ reviews, stats }: TabReviewsProps) {
   const [sortBy, setSortBy] = useState<"recent" | "highest" | "lowest">("recent");
   const [filterRating, setFilterRating] = useState<number | null>(null);
   const [helpfulCounts, setHelpfulCounts] = useState<Record<string, number>>(
     Object.fromEntries(reviews.map((r) => [r.id, r.helpfulCount || 0]))
   );
+
+  const sortOptions: { value: "recent" | "highest" | "lowest"; label: string }[] = [
+    { value: "recent", label: "Terbaru" },
+    { value: "highest", label: "Rated Tertinggi" },
+    { value: "lowest", label: "Rated Terendah" },
+  ];
+
+  const filterOptions: { value: number | null; label: string }[] = [
+    { value: null, label: "Semua Bintang" },
+    { value: 5, label: "5 Bintang" },
+    { value: 4, label: "4 Bintang" },
+    { value: 3, label: "3 Bintang" },
+    { value: 2, label: "2 Bintang" },
+    { value: 1, label: "1 Bintang" },
+  ];
 
   const filteredReviews = [...reviews]
     .filter((r) => filterRating === null || r.rating === filterRating)
@@ -71,36 +155,18 @@ export default function TabReviews({ reviews, stats }: TabReviewsProps) {
         </h2>
 
         <div className="flex gap-3 flex-wrap">
-          {/* Sort */}
-          <div className="relative">
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-              className="appearance-none pl-4 pr-10 py-2 rounded-full border border-black/10 dark:border-white/10 bg-white dark:bg-neutral-900 text-sm text-neutral-600 dark:text-white/50 cursor-pointer hover:border-primary/50 transition-colors"
-            >
-              <option value="recent">Terbaru</option>
-              <option value="highest">Rated Tertinggi</option>
-              <option value="lowest">Rated Terendah</option>
-            </select>
-            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" />
-          </div>
-
-          {/* Filter */}
-          <div className="relative">
-            <select
-              value={filterRating ?? ""}
-              onChange={(e) => setFilterRating(e.target.value ? Number(e.target.value) : null)}
-              className="appearance-none pl-4 pr-10 py-2 rounded-full border border-black/10 dark:border-white/10 bg-white dark:bg-neutral-900 text-sm text-neutral-600 dark:text-white/50 cursor-pointer hover:border-primary/50 transition-colors"
-            >
-              <option value="">Semua Bintang</option>
-              <option value="5">5 Bintang</option>
-              <option value="4">4 Bintang</option>
-              <option value="3">3 Bintang</option>
-              <option value="2">2 Bintang</option>
-              <option value="1">1 Bintang</option>
-            </select>
-            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" />
-          </div>
+          <CustomDropdown
+            label="Urutkan"
+            options={sortOptions}
+            value={sortBy}
+            onChange={(v) => setSortBy(v as "recent" | "highest" | "lowest")}
+          />
+          <CustomDropdown
+            label="Filter"
+            options={filterOptions}
+            value={filterRating}
+            onChange={(v) => setFilterRating(v as number | null)}
+          />
         </div>
       </div>
 
@@ -133,7 +199,7 @@ export default function TabReviews({ reviews, stats }: TabReviewsProps) {
             return (
               <div key={stars} className="flex items-center gap-3">
                 <span className="text-sm text-neutral-600 dark:text-white/50 w-12">
-                  {stars} ★
+                  {stars} &#9733;
                 </span>
                 <div className="flex-1 h-2.5 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden">
                   <motion.div
@@ -205,7 +271,7 @@ export default function TabReviews({ reviews, stats }: TabReviewsProps) {
 
               {/* Helpful Actions */}
               <div className="flex items-center gap-4 pt-2 border-t border-black/5 dark:border-white/5">
-                <span className="text-xs text-neutral-400">Bantuful?</span>
+                <span className="text-xs text-neutral-400">Bermafaat?</span>
                 <button
                   onClick={() => handleHelpful(review.id, true)}
                   className="flex items-center gap-1.5 text-xs text-neutral-500 hover:text-primary transition-colors"
