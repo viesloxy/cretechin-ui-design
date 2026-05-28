@@ -1,0 +1,10 @@
+export { default as Breadcrumb } from "./Breadcrumb";
+export { default as ProductGallery } from "./ProductGallery";
+export { default as ProductInfo } from "./ProductInfo";
+export { default as StickyPurchaseCard } from "./StickyPurchaseCard";
+export { default as ProductTabs } from "./ProductTabs";
+export type { ProductTabType } from "./ProductTabs";
+export { default as TabDescription } from "./TabDescription";
+export { default as TabSpecification } from "./TabSpecification";
+export { default as TabReviews } from "./TabReviews";
+export { default as RelatedProducts } from "./RelatedProducts";
