@@ -70,7 +70,7 @@ const MotionButton = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={cn(
-        'relative h-auto w-auto cursor-pointer rounded-full overflow-hidden outline-none transition-all duration-300',
+        'relative h-auto w-auto cursor-pointer rounded-full overflow-hidden outline-none transition-all duration-300 hover:scale-105 active:scale-95',
         disabled && 'opacity-50 cursor-not-allowed',
         classes
       )}
@@ -78,7 +78,7 @@ const MotionButton = ({
       {/* Background layer */}
       <span
         className={`absolute inset-0 transition-all duration-500 ${
-          isHovered ? 'bg-primary scale-100' : 'bg-primary'
+          isHovered ? 'bg-primary-dark' : 'bg-primary'
         }`}
       />
       {/* Text and icon layer */}

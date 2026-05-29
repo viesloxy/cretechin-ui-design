@@ -3,22 +3,40 @@
 import { useState } from "react";
 import { ShoppingCart, Heart, Share2, Loader2, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { useCart } from "@/context/CartContext";
 
 interface StickyPurchaseCardProps {
   product: {
     id: string;
     title: string;
+    subtitle?: string;
+    thumbnail?: string;
     price: number;
+    badge?: string;
   };
 }
 
 export default function StickyPurchaseCard({ product }: StickyPurchaseCardProps) {
+  const { addItem, items } = useCart();
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
 
+  const isAlreadyInCart = items.some((item) => item.id === product.id);
+
   const handleAddToCart = async () => {
+    if (isAlreadyInCart) return;
     setIsAddingToCart(true);
     await new Promise((resolve) => setTimeout(resolve, 800));
+    addItem({
+      id: product.id,
+      type: "asset",
+      title: product.title,
+      subtitle: product.subtitle || "",
+      thumbnail: product.thumbnail || "",
+      price: product.price,
+      badge: product.badge,
+      addedAt: new Date().toISOString(),
+    });
     setIsAddingToCart(false);
   };
 
@@ -36,18 +54,16 @@ export default function StickyPurchaseCard({ product }: StickyPurchaseCardProps)
         {/* Primary CTA - Add to Cart */}
         <button
           onClick={handleAddToCart}
-          disabled={isAddingToCart}
-          className="w-full relative h-auto cursor-pointer rounded-full overflow-hidden outline-none transition-all duration-300 bg-primary hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={isAddingToCart || isAlreadyInCart}
+          className="w-full relative h-auto cursor-pointer rounded-full overflow-hidden outline-none transition-all duration-300 bg-primary hover:bg-primary-dark disabled:opacity-60 disabled:cursor-not-allowed"
         >
           <span className="absolute inset-0 bg-primary" />
           <span className="relative z-10 flex items-center justify-center gap-2 px-8 py-3.5">
             <span className="text-sm font-medium tracking-tight text-black">
-              {isAddingToCart ? "Memuat..." : "Tambah ke Keranjang"}
+              {isAlreadyInCart ? "Sudah di Keranjang" : isAddingToCart ? "Memuat..." : "Tambah ke Keranjang"}
             </span>
-            {!isAddingToCart && (
-              <span className="transition-all duration-500 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0">
-                <ShoppingCart className="w-4 h-4 text-black" />
-              </span>
+            {!isAddingToCart && !isAlreadyInCart && (
+              <ShoppingCart className="w-4 h-4 text-black" />
             )}
             {isAddingToCart && <Loader2 className="w-4 h-4 animate-spin text-black" />}
           </span>
@@ -106,13 +122,13 @@ export default function StickyPurchaseCard({ product }: StickyPurchaseCardProps)
           </div>
           <button
             onClick={handleAddToCart}
-            disabled={isAddingToCart}
-            className="flex-1 relative h-auto cursor-pointer rounded-full overflow-hidden outline-none transition-all duration-300 bg-primary hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isAddingToCart || isAlreadyInCart}
+            className="flex-1 relative h-auto cursor-pointer rounded-full overflow-hidden outline-none transition-all duration-300 bg-primary hover:bg-primary-dark disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <span className="absolute inset-0 bg-primary" />
             <span className="relative z-10 flex items-center justify-center gap-2 px-6 py-3.5">
               <span className="text-sm font-medium tracking-tight text-black">
-                {isAddingToCart ? "Memuat..." : "Tambah ke Keranjang"}
+                {isAlreadyInCart ? "Sudah di Keranjang" : isAddingToCart ? "Memuat..." : "Tambah ke Keranjang"}
               </span>
               {isAddingToCart ? (
                 <Loader2 className="w-4 h-4 animate-spin text-black" />

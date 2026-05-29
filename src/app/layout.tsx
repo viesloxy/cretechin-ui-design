@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/ui/CustomCursor";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { CartProvider } from "@/context/CartContext";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -26,8 +27,10 @@ export default function RootLayout({
     <html lang="id" suppressHydrationWarning>
       <body className={`${poppins.variable} font-sans antialiased`}>
         <ThemeProvider>
-          <CustomCursor />
-          {children}
+          <CartProvider>
+            <CustomCursor />
+            {children}
+          </CartProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -249,7 +249,16 @@ function ProductDetailContent() {
             className="space-y-6"
           >
             <ProductInfo product={product} />
-            <StickyPurchaseCard product={product} />
+            <StickyPurchaseCard
+              product={{
+                id: product.id,
+                title: product.title,
+                subtitle: product.creator.name,
+                thumbnail: product.images[0],
+                price: product.price,
+                badge: product.badge,
+              }}
+            />
           </motion.div>
         </div>
       </div>
