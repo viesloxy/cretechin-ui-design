@@ -61,11 +61,11 @@ const MOCK_PRODUCT: MockProduct = {
   creator: { id: "creator-1", name: "DesignStudio Pro", isVerified: true },
   badge: "Populer",
   images: [
-    "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&q=80",
-    "https://images.unsplash.com/photo-1545235617-9465d2a55698?w=800&q=80",
-    "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=800&q=80",
-    "https://images.unsplash.com/photo-1616469829581-76593d8b13a6?w=800&q=80",
-    "https://images.unsplash.com/photo-1611532736597-de2d7415b4ab?w=800&q=80",
+    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+    "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&q=80",
+    "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80",
+    "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80",
   ],
   price: 299000,
   originalPrice: 450000,
@@ -92,9 +92,9 @@ Dirancang dengan prinsip atomic design, kit ini memungkinkan Anda membangun inte
     updates: "Lifetime",
   },
   additionalImages: [
-    "https://images.unsplash.com/photo-1545235617-9465d2a55698?w=600&q=80",
-    "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=600&q=80",
-    "https://images.unsplash.com/photo-1616469829581-76593d8b13a6?w=600&q=80",
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80",
+    "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80",
+    "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&q=80",
   ],
 };
 
@@ -151,7 +151,7 @@ const MOCK_RELATED_PRODUCTS: MockRelatedProduct[] = [
     id: "rel-1",
     title: "Premium Icon Set - 1000+ Icons",
     creator: "IconFactory",
-    image: "https://images.unsplash.com/photo-1611532736597-de2d7415b4ab?w=600&q=80",
+    image: "https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=600&q=80",
     price: 99000,
     rating: 4.7,
   },

@@ -116,7 +116,7 @@ const DEMO_CART_ITEMS: CartItem[] = [
     type: "asset",
     title: "Premium Icon Set - 1000+ Icons",
     subtitle: "IconFactory",
-    thumbnail: "https://images.unsplash.com/photo-1611532736597-de2d7415b4ab?w=400",
+    thumbnail: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=400",
     price: 99000,
     badge: "Aset Digital",
     addedAt: new Date().toISOString(),
