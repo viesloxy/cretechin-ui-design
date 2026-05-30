@@ -4,26 +4,49 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronUp, ShieldCheck, ArrowRight } from "lucide-react";
 import Image from "next/image";
-import { useCart } from "@/context/CartContext";
-import type { PaymentMethod } from "./PaymentMethodGroup";
+
+interface OrderItem {
+  id: string;
+  title: string;
+  subtitle: string;
+  thumbnail: string;
+  price: number;
+  badge?: string;
+}
 
 interface OrderSummaryCheckoutProps {
-  selectedMethod: PaymentMethod | null;
+  selectedMethod: { id: string } | null;
   onPay: () => void;
 }
 
+const DEMO_CHECKOUT_ITEMS: OrderItem[] = [
+  {
+    id: "checkout-demo-1",
+    title: "Mastering React & Next.js 14",
+    subtitle: "Budi Santoso",
+    thumbnail: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400",
+    price: 299000,
+    badge: "Program Belajar",
+  },
+  {
+    id: "checkout-demo-2",
+    title: "Premium Icon Set - 1000+ Icons",
+    subtitle: "IconFactory",
+    thumbnail: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=400",
+    price: 99000,
+    badge: "Aset Digital",
+  },
+];
+
 export default function OrderSummaryCheckout({ selectedMethod, onPay }: OrderSummaryCheckoutProps) {
-  const { items, getSubtotal, getDiscount, getTotal } = useCart();
   const [isItemListOpen, setIsItemListOpen] = useState(false);
 
-  const subtotal = getSubtotal();
-  const discount = getDiscount();
-  const total = getTotal();
+  const items = DEMO_CHECKOUT_ITEMS;
+  const subtotal = items.reduce((sum, item) => sum + item.price, 0);
+  const discount = 0;
+  const total = subtotal - discount;
   const shippingCost = 15000;
-
   const totalWithShipping = total + shippingCost;
-
-  const discountPercentage = subtotal > 0 ? Math.round((discount / subtotal) * 100) : 0;
 
   return (
     <div className="bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/5 rounded-2xl overflow-hidden sticky top-24">
@@ -114,7 +137,7 @@ export default function OrderSummaryCheckout({ selectedMethod, onPay }: OrderSum
               className="flex items-center justify-between"
             >
               <span className="text-sm text-emerald-500 flex items-center gap-1">
-                Diskon {discountPercentage > 0 && `-${discountPercentage}%`}
+                Diskon
               </span>
               <span className="text-sm font-medium text-emerald-500">
                 -Rp {discount.toLocaleString("id-ID")}

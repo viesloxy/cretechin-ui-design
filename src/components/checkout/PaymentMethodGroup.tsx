@@ -31,9 +31,9 @@ const GROUP_ICONS = {
 };
 
 const GROUP_ANIMATIONS = {
-  ewallet: { accent: "text-emerald-500", bg: "bg-emerald-500/10" },
-  virtualaccount: { accent: "text-blue-500", bg: "bg-blue-500/10" },
-  creditcard: { accent: "text-violet-500", bg: "bg-violet-500/10" },
+  ewallet: { accent: "text-neutral-600 dark:text-white", bg: "bg-neutral-100 dark:bg-neutral-800" },
+  virtualaccount: { accent: "text-neutral-600 dark:text-white", bg: "bg-neutral-100 dark:bg-neutral-800" },
+  creditcard: { accent: "text-neutral-600 dark:text-white", bg: "bg-neutral-100 dark:bg-neutral-800" },
 };
 
 export default function PaymentMethodGroup({
