@@ -4,6 +4,7 @@ import "./globals.css";
 import CustomCursor from "@/components/ui/CustomCursor";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { CartProvider } from "@/context/CartContext";
+import { AuthProvider } from "@/context/AuthContext";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -28,8 +29,10 @@ export default function RootLayout({
       <body className={`${poppins.variable} font-sans antialiased`}>
         <ThemeProvider>
           <CartProvider>
-            <CustomCursor />
-            {children}
+            <AuthProvider>
+              <CustomCursor />
+              {children}
+            </AuthProvider>
           </CartProvider>
         </ThemeProvider>
       </body>

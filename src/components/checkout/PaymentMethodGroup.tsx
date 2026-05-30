@@ -93,7 +93,7 @@ export default function PaymentMethodGroup({
               {options.map((option) => (
                 <PaymentOption
                   key={option.id}
-                  option={option}
+                  method={option}
                   isSelected={selectedId === option.id}
                   onSelect={() => onSelect(option)}
                 />

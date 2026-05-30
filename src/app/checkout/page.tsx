@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
 import BerandaNavbar from "@/components/beranda/BerandaNavbar";
 import Footer from "@/components/landing-page/Footer";
 import CheckoutHeader from "@/components/checkout/CheckoutHeader";
@@ -12,8 +11,9 @@ import MobileBottomBar from "@/components/checkout/MobileBottomBar";
 import { useCart } from "@/context/CartContext";
 import type { PaymentMethod } from "@/components/checkout/PaymentMethodGroup";
 
-const PAYMENT_METHODS = {
-  ewallet: {
+const PAYMENT_METHODS = [
+  {
+    type: "ewallet" as const,
     label: "E-Wallet",
     options: [
       { id: "gopay", group: "ewallet" as const, name: "GoPay", label: "GoPay", sublabel: "Proses instan", logo: "/images/payment1.svg" },
@@ -22,7 +22,8 @@ const PAYMENT_METHODS = {
       { id: "shopeepay", group: "ewallet" as const, name: "ShopeePay", label: "ShopeePay", sublabel: "Proses instan", logo: "/images/payment1.svg" },
     ],
   },
-  virtualaccount: {
+  {
+    type: "virtualaccount" as const,
     label: "Virtual Account",
     options: [
       { id: "bca_va", group: "virtualaccount" as const, name: "BCA VA", label: "BCA Virtual Account", sublabel: "Tidak ada biaya admin", logo: "/images/payment1.svg" },
@@ -30,105 +31,110 @@ const PAYMENT_METHODS = {
       { id: "bni_va", group: "virtualaccount" as const, name: "BNI VA", label: "BNI Virtual Account", sublabel: "Biaya admin Rp 2.500", logo: "/images/payment1.svg" },
     ],
   },
-  creditcard: {
+  {
+    type: "creditcard" as const,
     label: "Kartu Kredit/Debit",
     options: [
       { id: "visa", group: "creditcard" as const, name: "Visa", label: "Visa", sublabel: "Kartu kredit & debit Visa", logo: "/images/payment1.svg" },
       { id: "mastercard", group: "creditcard" as const, name: "Mastercard", label: "Mastercard", sublabel: "Kartu kredit & debit Mastercard", logo: "/images/payment1.svg" },
     ],
   },
-};
+];
+
+const SHIPPING_COST = 15000;
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, getSubtotal, getTotal } = useCart();
-
+  const { items, getSubtotal } = useCart();
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod | null>(null);
-  const [expandedGroup, setExpandedGroup] = useState<"ewallet" | "virtualaccount" | "creditcard" | null>("ewallet");
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [expandedGroup, setExpandedGroup] = useState<string>("");
 
   const subtotal = getSubtotal();
-  const total = getTotal();
+  const total = subtotal + SHIPPING_COST;
 
-  // Admin fee for some methods
-  const adminFee =
-    selectedMethod?.id === "mandiri_va" || selectedMethod?.id === "bni_va" ? 2500 : 0;
-  const shippingCost = 15000;
-  const grandTotal = total + shippingCost + adminFee;
-
-  const handleSelectMethod = (method: PaymentMethod) => {
+  const handleSelect = (method: PaymentMethod) => {
     setSelectedMethod(method);
+  };
+
+  const handleToggle = (type: string) => {
+    setExpandedGroup((prev) => (prev === type ? "" : type));
   };
 
   const handlePay = () => {
     if (!selectedMethod) return;
-    setIsProcessing(true);
-    setTimeout(() => {
-      router.push(`/orders/new?method=${selectedMethod!.id}&total=${grandTotal}`);
-    }, 800);
+    const orderId = `ORD-${Date.now()}`;
+    router.push(`/orders/${orderId}?method=${selectedMethod.id}`);
   };
 
-  const groupKeys = Object.keys(PAYMENT_METHODS) as Array<keyof typeof PAYMENT_METHODS>;
+  if (items.length === 0) {
+    return (
+      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
+        <BerandaNavbar />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-20 text-center">
+          <p className="text-neutral-500 dark:text-white/50">Keranjang Anda kosong.</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
       <BerandaNavbar />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 pb-32 lg:pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-32 lg:pb-12">
         <CheckoutHeader />
+
+        {/* Mobile: Order Summary di atas */}
+        <div className="lg:hidden mb-6">
+          <OrderSummaryCheckout
+            items={items}
+            subtotal={subtotal}
+            shipping={SHIPPING_COST}
+            total={total}
+            selectedMethod={selectedMethod}
+            onPay={handlePay}
+          />
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Left: Payment Methods */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-2 space-y-4"
-          >
-            {groupKeys.map((key) => {
-              const group = PAYMENT_METHODS[key];
-              return (
-                <PaymentMethodGroup
-                  key={key}
-                  type={key}
-                  label={group.label}
-                  options={group.options}
-                  selectedId={selectedMethod?.id ?? null}
-                  isExpanded={expandedGroup === key}
-                  onToggle={() => setExpandedGroup(expandedGroup === key ? null : key)}
-                  onSelect={handleSelectMethod}
-                />
-              );
-            })}
-          </motion.div>
+          <div className="lg:col-span-2 space-y-4">
+            {PAYMENT_METHODS.map((group) => (
+              <PaymentMethodGroup
+                key={group.type}
+                type={group.type}
+                label={group.label}
+                options={group.options}
+                selectedId={selectedMethod?.id ?? null}
+                isExpanded={expandedGroup === group.type}
+                onToggle={() => handleToggle(group.type)}
+                onSelect={handleSelect}
+              />
+            ))}
+          </div>
 
-          {/* Right: Order Summary */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <div className="sticky top-24">
+          {/* Right: Order Summary (desktop only) */}
+          <div className="hidden lg:block">
+            <div className="sticky top-28">
               <OrderSummaryCheckout
                 items={items}
                 subtotal={subtotal}
-                shipping={shippingCost}
-                adminFee={adminFee}
-                total={grandTotal}
+                shipping={SHIPPING_COST}
+                total={total}
                 selectedMethod={selectedMethod}
                 onPay={handlePay}
-                isProcessing={isProcessing}
               />
             </div>
-          </motion.div>
+          </div>
         </div>
-      </main>
+      </div>
 
+      {/* Mobile Bottom Bar */}
       <MobileBottomBar
-        total={grandTotal}
+        total={total}
         selectedMethod={selectedMethod}
         onPay={handlePay}
-        isProcessing={isProcessing}
       />
 
       <Footer />
