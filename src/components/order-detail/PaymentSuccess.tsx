@@ -16,23 +16,11 @@ interface OrderItem {
 interface PaymentSuccessProps {
   amount: number;
   methodName: string;
-  orderId: string;
+  _orderId: string;
   items: OrderItem[];
-  subtotal: number;
+  _subtotal: number;
   shipping: number;
 }
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    transition: { staggerChildren: 0.1 },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0 },
-};
 
 function formatDate(date: Date): string {
   return date.toLocaleDateString("id-ID", {
@@ -48,9 +36,9 @@ function formatDate(date: Date): string {
 export default function PaymentSuccess({
   amount,
   methodName,
-  orderId,
+  _orderId,
   items,
-  subtotal,
+  _subtotal,
   shipping,
 }: PaymentSuccessProps) {
   const now = new Date();
@@ -67,9 +55,9 @@ export default function PaymentSuccess({
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-6 bg-income/10 rounded-full flex items-center justify-center"
+        className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-6 flex items-center justify-center"
       >
-        <CheckCircle2 className="w-12 h-12 sm:w-14 sm:h-14 text-income" />
+        <CheckCircle2 className="w-12 h-12 sm:w-14 sm:h-14 text-primary" />
       </motion.div>
 
       {/* Title */}
@@ -115,7 +103,7 @@ export default function PaymentSuccess({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.6 }}
-        className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-xl text-left mb-6"
+        className="text-left mb-6"
       >
         <p className="text-sm font-semibold text-neutral-700 dark:text-white/80 mb-3">
           Ringkasan Pembelian
@@ -147,29 +135,20 @@ export default function PaymentSuccess({
       </motion.div>
 
       {/* Action Buttons */}
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="space-y-3"
-      >
-        <motion.div variants={itemVariants}>
-          <Link
-            href="/courses"
-            className="block w-full h-12 sm:h-14 rounded-full bg-primary text-neutral-900 font-semibold text-base flex items-center justify-center hover:bg-primary-dark active:scale-95 transition-all"
-          >
-            Lihat Kelas Saya
-          </Link>
-        </motion.div>
-        <motion.div variants={itemVariants}>
-          <Link
-            href="/dashboard"
-            className="block w-full h-12 sm:h-14 rounded-full border border-neutral-300 dark:border-white/20 text-neutral-700 dark:text-white font-semibold text-base flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 active:scale-95 transition-all"
-          >
-            Kembali ke Beranda
-          </Link>
-        </motion.div>
-      </motion.div>
+      <div className="space-y-3">
+        <Link
+          href="/products"
+          className="block w-full py-3 px-6 rounded-full bg-primary text-black font-semibold text-base text-center hover:bg-primary-dark transition-colors"
+        >
+          Lihat Marketplace CreTechin
+        </Link>
+        <Link
+          href="/beranda"
+          className="block w-full py-3 px-6 rounded-full border border-neutral-300 dark:border-white/20 text-neutral-700 dark:text-white font-semibold text-base text-center hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+        >
+          Kembali ke Beranda
+        </Link>
+      </div>
     </motion.div>
   );
 }
