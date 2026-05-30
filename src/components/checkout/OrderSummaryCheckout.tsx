@@ -2,54 +2,43 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp, ShieldCheck, ArrowRight } from "lucide-react";
+import { ChevronDown, ChevronUp, ShieldCheck, ArrowRight, Loader2 } from "lucide-react";
 import Image from "next/image";
 
 interface OrderItem {
   id: string;
   title: string;
-  subtitle: string;
-  thumbnail: string;
+  subtitle?: string;
+  thumbnail?: string;
   price: number;
   badge?: string;
 }
 
 interface OrderSummaryCheckoutProps {
+  items: OrderItem[];
+  subtotal: number;
+  shipping: number;
+  adminFee?: number;
+  total: number;
   selectedMethod: { id: string } | null;
   onPay: () => void;
+  isProcessing?: boolean;
 }
 
-const DEMO_CHECKOUT_ITEMS: OrderItem[] = [
-  {
-    id: "checkout-demo-1",
-    title: "Mastering React & Next.js 14",
-    subtitle: "Budi Santoso",
-    thumbnail: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400",
-    price: 299000,
-    badge: "Program Belajar",
-  },
-  {
-    id: "checkout-demo-2",
-    title: "Premium Icon Set - 1000+ Icons",
-    subtitle: "IconFactory",
-    thumbnail: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=400",
-    price: 99000,
-    badge: "Aset Digital",
-  },
-];
-
-export default function OrderSummaryCheckout({ selectedMethod, onPay }: OrderSummaryCheckoutProps) {
+export default function OrderSummaryCheckout({
+  items,
+  subtotal,
+  shipping,
+  adminFee = 0,
+  total,
+  selectedMethod,
+  onPay,
+  isProcessing = false,
+}: OrderSummaryCheckoutProps) {
   const [isItemListOpen, setIsItemListOpen] = useState(false);
 
-  const items = DEMO_CHECKOUT_ITEMS;
-  const subtotal = items.reduce((sum, item) => sum + item.price, 0);
-  const discount = 0;
-  const total = subtotal - discount;
-  const shippingCost = 15000;
-  const totalWithShipping = total + shippingCost;
-
   return (
-    <div className="bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/5 rounded-2xl overflow-hidden sticky top-24">
+    <div className="bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/5 rounded-2xl overflow-hidden">
       {/* Header */}
       <div className="px-5 sm:px-6 py-4 sm:py-5 border-b border-black/5 dark:border-white/5">
         <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
@@ -90,22 +79,26 @@ export default function OrderSummaryCheckout({ selectedMethod, onPay }: OrderSum
                     key={item.id}
                     className="flex items-center gap-3 p-2.5 rounded-xl bg-neutral-50 dark:bg-neutral-800"
                   >
-                    <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 border border-black/5 dark:border-white/10">
-                      <Image
-                        src={item.thumbnail}
-                        alt={item.title}
-                        width={40}
-                        height={40}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+                    {item.thumbnail && (
+                      <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 border border-black/5 dark:border-white/10">
+                        <Image
+                          src={item.thumbnail}
+                          alt={item.title}
+                          width={40}
+                          height={40}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-medium text-neutral-900 dark:text-white line-clamp-1">
                         {item.title}
                       </p>
-                      <p className="text-xs text-neutral-500 dark:text-white/50 mt-0.5">
-                        {item.subtitle}
-                      </p>
+                      {item.subtitle && (
+                        <p className="text-xs text-neutral-500 dark:text-white/50 mt-0.5">
+                          {item.subtitle}
+                        </p>
+                      )}
                     </div>
                     <span className="text-xs font-semibold text-primary whitespace-nowrap">
                       Rp {item.price.toLocaleString("id-ID")}
@@ -129,28 +122,21 @@ export default function OrderSummaryCheckout({ selectedMethod, onPay }: OrderSum
             </span>
           </div>
 
-          {discount > 0 && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="flex items-center justify-between"
-            >
-              <span className="text-sm text-emerald-500 flex items-center gap-1">
-                Diskon
-              </span>
-              <span className="text-sm font-medium text-emerald-500">
-                -Rp {discount.toLocaleString("id-ID")}
-              </span>
-            </motion.div>
-          )}
-
           <div className="flex items-center justify-between">
             <span className="text-sm text-neutral-500 dark:text-white/50">Ongkos Kirim</span>
             <span className="text-sm font-medium text-neutral-900 dark:text-white">
-              Rp {shippingCost.toLocaleString("id-ID")}
+              Rp {shipping.toLocaleString("id-ID")}
             </span>
           </div>
+
+          {adminFee > 0 && (
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-neutral-500 dark:text-white/50">Biaya Admin</span>
+              <span className="text-sm font-medium text-neutral-900 dark:text-white">
+                Rp {adminFee.toLocaleString("id-ID")}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Divider */}
@@ -161,7 +147,7 @@ export default function OrderSummaryCheckout({ selectedMethod, onPay }: OrderSum
           <span className="text-base font-semibold text-neutral-900 dark:text-white">Total</span>
           <div className="text-right">
             <span className="text-2xl font-bold text-primary">
-              Rp {totalWithShipping.toLocaleString("id-ID")}
+              Rp {total.toLocaleString("id-ID")}
             </span>
           </div>
         </div>
@@ -169,15 +155,21 @@ export default function OrderSummaryCheckout({ selectedMethod, onPay }: OrderSum
         {/* Pay Button */}
         <button
           onClick={onPay}
-          disabled={!selectedMethod}
+          disabled={!selectedMethod || isProcessing}
           className={`w-full h-12 sm:h-14 rounded-full font-semibold text-base flex items-center justify-center gap-2 transition-all ${
-            selectedMethod
+            selectedMethod && !isProcessing
               ? "bg-primary text-neutral-900 hover:bg-primary-dark active:scale-95"
               : "bg-neutral-200 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400 cursor-not-allowed opacity-60"
           }`}
         >
-          <span>Bayar Sekarang</span>
-          <ArrowRight className="w-5 h-5" />
+          {isProcessing ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : (
+            <>
+              <span>Bayar Sekarang</span>
+              <ArrowRight className="w-5 h-5" />
+            </>
+          )}
         </button>
 
         {/* Security Note */}

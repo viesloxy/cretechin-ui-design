@@ -1,20 +1,22 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import { useCart } from "@/context/CartContext";
+import { ArrowRight, Loader2 } from "lucide-react";
 import type { PaymentMethod } from "./PaymentMethodGroup";
 
 interface MobileBottomBarProps {
+  total: number;
   selectedMethod: PaymentMethod | null;
   onPay: () => void;
+  isProcessing?: boolean;
 }
 
-export default function MobileBottomBar({ selectedMethod, onPay }: MobileBottomBarProps) {
-  const { getSubtotal, getDiscount, getTotal } = useCart();
-
-  const total = getTotal() - getDiscount() + 15000;
-
+export default function MobileBottomBar({
+  total,
+  selectedMethod,
+  onPay,
+  isProcessing = false,
+}: MobileBottomBarProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 100 }}
@@ -30,15 +32,21 @@ export default function MobileBottomBar({ selectedMethod, onPay }: MobileBottomB
       </div>
       <button
         onClick={onPay}
-        disabled={!selectedMethod}
+        disabled={!selectedMethod || isProcessing}
         className={`h-12 px-6 rounded-full font-semibold text-sm flex items-center justify-center gap-2 transition-all flex-shrink-0 ${
-          selectedMethod
+          selectedMethod && !isProcessing
             ? "bg-primary text-neutral-900 hover:bg-primary-dark active:scale-95"
             : "bg-neutral-200 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400 cursor-not-allowed opacity-60"
         }`}
       >
-        <span>Bayar Sekarang</span>
-        <ArrowRight className="w-5 h-5" />
+        {isProcessing ? (
+          <Loader2 className="w-5 h-5 animate-spin" />
+        ) : (
+          <>
+            <span>Bayar Sekarang</span>
+            <ArrowRight className="w-5 h-5" />
+          </>
+        )}
       </button>
     </motion.div>
   );
