@@ -16,27 +16,27 @@ const PAYMENT_METHODS = [
     type: "ewallet" as const,
     label: "E-Wallet",
     options: [
-      { id: "gopay", group: "ewallet" as const, name: "GoPay", label: "GoPay", sublabel: "Proses instan", logo: "/images/payment1.svg" },
-      { id: "ovo", group: "ewallet" as const, name: "OVO", label: "OVO", sublabel: "Proses 1x24 jam", logo: "/images/payment1.svg" },
-      { id: "dana", group: "ewallet" as const, name: "DANA", label: "DANA", sublabel: "Proses instan", logo: "/images/payment1.svg" },
-      { id: "shopeepay", group: "ewallet" as const, name: "ShopeePay", label: "ShopeePay", sublabel: "Proses instan", logo: "/images/payment1.svg" },
+      { id: "gopay", group: "ewallet" as const, name: "GoPay", label: "GoPay", sublabel: "Proses instan", logo: "/images/Payment=GoPay.svg" },
+      { id: "ovo", group: "ewallet" as const, name: "OVO", label: "OVO", sublabel: "Proses 1x24 jam", logo: "/images/Payment=OVO.svg" },
+      { id: "dana", group: "ewallet" as const, name: "DANA", label: "DANA", sublabel: "Proses instan", logo: "/images/Payment=DANA.svg" },
+      { id: "shopeepay", group: "ewallet" as const, name: "ShopeePay", label: "ShopeePay", sublabel: "Proses instan", logo: "/images/Payment=ShopeePay.svg" },
     ],
   },
   {
     type: "virtualaccount" as const,
     label: "Virtual Account",
     options: [
-      { id: "bca_va", group: "virtualaccount" as const, name: "BCA VA", label: "BCA Virtual Account", sublabel: "Tidak ada biaya admin", logo: "/images/payment1.svg" },
-      { id: "mandiri_va", group: "virtualaccount" as const, name: "Mandiri VA", label: "Mandiri Virtual Account", sublabel: "Biaya admin Rp 2.500", logo: "/images/payment1.svg" },
-      { id: "bni_va", group: "virtualaccount" as const, name: "BNI VA", label: "BNI Virtual Account", sublabel: "Biaya admin Rp 2.500", logo: "/images/payment1.svg" },
+      { id: "bca_va", group: "virtualaccount" as const, name: "BCA VA", label: "BCA Virtual Account", sublabel: "Tidak ada biaya admin", logo: "/images/Payment=BCA Virtual Account.svg" },
+      { id: "mandiri_va", group: "virtualaccount" as const, name: "Mandiri VA", label: "Mandiri Virtual Account", sublabel: "Biaya admin Rp 2.500", logo: "/images/Payment=Mandiri Virtual Account.svg" },
+      { id: "bni_va", group: "virtualaccount" as const, name: "BNI VA", label: "BNI Virtual Account", sublabel: "Biaya admin Rp 2.500", logo: "/images/Payment=BNI Virtual Account.svg" },
     ],
   },
   {
     type: "creditcard" as const,
     label: "Kartu Kredit/Debit",
     options: [
-      { id: "visa", group: "creditcard" as const, name: "Visa", label: "Visa", sublabel: "Kartu kredit & debit Visa", logo: "/images/payment1.svg" },
-      { id: "mastercard", group: "creditcard" as const, name: "Mastercard", label: "Mastercard", sublabel: "Kartu kredit & debit Mastercard", logo: "/images/payment1.svg" },
+      { id: "visa", group: "creditcard" as const, name: "Visa", label: "Visa", sublabel: "Kartu kredit & debit Visa", logo: "/images/Payment=Visa.svg" },
+      { id: "mastercard", group: "creditcard" as const, name: "Mastercard", label: "Mastercard", sublabel: "Kartu kredit & debit Mastercard", logo: "/images/Payment=Mastercard.svg" },
     ],
   },
 ];

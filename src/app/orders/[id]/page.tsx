@@ -29,18 +29,19 @@ interface PaymentMethodInfo {
   label: string;
   type: "ewallet" | "virtualaccount" | "creditcard";
   name: string;
+  logo: string;
 }
 
 const METHOD_MAP: Record<string, PaymentMethodInfo> = {
-  gopay:     { id: "gopay",      label: "GoPay",             type: "ewallet",       name: "GoPay" },
-  ovo:       { id: "ovo",        label: "OVO",               type: "ewallet",       name: "OVO" },
-  dana:      { id: "dana",       label: "DANA",              type: "ewallet",       name: "DANA" },
-  shopeepay: { id: "shopeepay",  label: "ShopeePay",         type: "ewallet",       name: "ShopeePay" },
-  bca_va:    { id: "bca_va",     label: "BCA Virtual Account", type: "virtualaccount", name: "BCA VA" },
-  mandiri_va: { id: "mandiri_va", label: "Mandiri Virtual Account", type: "virtualaccount", name: "Mandiri VA" },
-  bni_va:    { id: "bni_va",     label: "BNI Virtual Account", type: "virtualaccount", name: "BNI VA" },
-  visa:      { id: "visa",       label: "Visa",              type: "creditcard",    name: "Visa" },
-  mastercard: { id: "mastercard", label: "Mastercard",        type: "creditcard",    name: "Mastercard" },
+  gopay:      { id: "gopay",       label: "GoPay",                    type: "ewallet",        name: "GoPay",       logo: "/images/Payment=GoPay.svg" },
+  ovo:        { id: "ovo",         label: "OVO",                      type: "ewallet",        name: "OVO",         logo: "/images/Payment=OVO.svg" },
+  dana:       { id: "dana",        label: "DANA",                     type: "ewallet",        name: "DANA",        logo: "/images/Payment=DANA.svg" },
+  shopeepay:  { id: "shopeepay",   label: "ShopeePay",                type: "ewallet",        name: "ShopeePay",   logo: "/images/Payment=ShopeePay.svg" },
+  bca_va:     { id: "bca_va",      label: "BCA Virtual Account",      type: "virtualaccount", name: "BCA VA",      logo: "/images/Payment=BCA Virtual Account.svg" },
+  mandiri_va: { id: "mandiri_va", label: "Mandiri Virtual Account",  type: "virtualaccount", name: "Mandiri VA",  logo: "/images/Payment=Mandiri Virtual Account.svg" },
+  bni_va:     { id: "bni_va",      label: "BNI Virtual Account",      type: "virtualaccount", name: "BNI VA",      logo: "/images/Payment=BNI Virtual Account.svg" },
+  visa:       { id: "visa",         label: "Visa",                     type: "creditcard",     name: "Visa",        logo: "/images/Payment=Visa.svg" },
+  mastercard: { id: "mastercard",  label: "Mastercard",               type: "creditcard",     name: "Mastercard",  logo: "/images/Payment=Mastercard.svg" },
 };
 
 const VA_MOCK_NUMBERS: Record<string, string> = {
@@ -140,7 +141,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
 
         {/* Expired State */}
         {isExpired && paymentStatus !== "paid" && (
-          <div className="mb-6 p-4 rounded-xl border border-error/30 bg-error/5">
+          <div className="mb-6 p-4 rounded-xl bg-error/5">
             <p className="text-sm font-semibold text-error text-center">
               Waktu pembayaran telah habis. Pesanan secara otomatis dibatalkan.
             </p>
@@ -168,7 +169,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
             {/* Payment Info Card */}
             <PaymentInfoCard
               amount={total}
-              method={{ id: method.id, label: method.label }}
+              method={method}
               orderId={orderId}
             />
 
@@ -178,6 +179,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
                 number={VA_MOCK_NUMBERS[methodId] ?? "8901 2345 6789 0123 4567"}
                 bankName={method.label}
                 amount={total}
+                logo={method.logo}
               />
             )}
 
@@ -185,11 +187,12 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
               <EWalletQRCard
                 name={method.name}
                 amount={total}
+                logo={method.logo}
               />
             )}
 
             {method.type === "creditcard" && (
-              <CardForm onSubmit={handleCardSubmit} isLoading={isLoading} />
+              <CardForm onSubmit={handleCardSubmit} isLoading={isLoading} logo={method.logo} />
             )}
 
             {/* Instructions */}

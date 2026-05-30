@@ -59,10 +59,10 @@ export default function TimerBanner({ expiresAt, onExpired }: TimerBannerProps) 
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className={`mb-6 p-4 rounded-xl border flex items-center gap-3 transition-colors ${
+      className={`mb-6 p-4 rounded-xl flex items-center gap-3 transition-colors ${
         isWarning
-          ? "border-error/30 bg-error/5"
-          : "border-warning/30 bg-warning/5"
+          ? "bg-error/5"
+          : "bg-warning/5"
       }`}
     >
       <Clock className={`w-5 h-5 flex-shrink-0 ${isWarning ? "text-error" : "text-warning"}`} />

@@ -7,6 +7,7 @@ import Image from "next/image";
 interface CardFormProps {
   onSubmit: (data: CardFormData) => void;
   isLoading?: boolean;
+  logo?: string;
 }
 
 export interface CardFormData {
@@ -36,7 +37,7 @@ function formatExpiry(value: string): string {
   return digits;
 }
 
-export default function CardForm({ onSubmit, isLoading }: CardFormProps) {
+export default function CardForm({ onSubmit, isLoading, logo = "/images/payment1.svg" }: CardFormProps) {
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
   const [cvv, setCvv] = useState("");
@@ -68,7 +69,7 @@ export default function CardForm({ onSubmit, isLoading }: CardFormProps) {
       <div className="flex items-center gap-3 mb-5">
 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border border-black/5 dark:border-white/10 overflow-hidden bg-neutral-50 dark:bg-neutral-800 flex-shrink-0">
           <Image
-            src="/images/payment1.svg"
+            src={logo}
             alt="Kartu Kredit/Debit"
             width={48}
             height={48}

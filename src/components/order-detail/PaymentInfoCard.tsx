@@ -6,6 +6,7 @@ import { CheckCircle2 } from "lucide-react";
 interface PaymentMethod {
   id: string;
   label: string;
+  logo: string;
 }
 
 interface PaymentInfoCardProps {
@@ -21,7 +22,7 @@ export default function PaymentInfoCard({ amount, method, orderId }: PaymentInfo
         {/* Logo placeholder */}
         <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl border border-black/5 dark:border-white/10 overflow-hidden flex-shrink-0 bg-neutral-50 dark:bg-neutral-800">
           <Image
-            src="/images/payment1.svg"
+            src={method.logo}
             alt={method.label}
             width={64}
             height={64}

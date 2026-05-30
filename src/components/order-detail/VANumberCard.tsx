@@ -8,9 +8,10 @@ interface VANumberCardProps {
   number: string;
   bankName: string;
   amount: number;
+  logo: string;
 }
 
-export default function VANumberCard({ number, bankName, amount }: VANumberCardProps) {
+export default function VANumberCard({ number, bankName, amount, logo }: VANumberCardProps) {
   const [copied, setCopied] = useState(false);
 
   const [toasts, setToasts] = useState<Array<{ id: string; type: "success" | "error"; title: string; message?: string }>>([]);
@@ -42,7 +43,7 @@ export default function VANumberCard({ number, bankName, amount }: VANumberCardP
       <div className="flex items-center gap-3 mb-4">
         <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border border-black/5 dark:border-white/10 overflow-hidden bg-neutral-50 dark:bg-neutral-800 flex-shrink-0">
           <Image
-            src="/images/payment1.svg"
+            src={logo}
             alt={bankName}
             width={48}
             height={48}
