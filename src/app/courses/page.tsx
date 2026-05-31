@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import BerandaNavbar from "@/components/beranda/BerandaNavbar";
 import Footer from "@/components/landing-page/Footer";
@@ -93,7 +93,7 @@ const mockCompletedCourses: CourseEnrollment[] = [
   {
     id: "enroll-010",
     courseId: "4",
-    title: "HTML & CSS Fundamental — Bangun Website Pertamamu",
+    title: "HTML& CSS Fundamental — Bangun Website Pertamamu",
     instructor: "Diana Putri",
     thumbnail: "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=600&q=80",
     progress: 100,
@@ -139,6 +139,29 @@ const mockCompletedCourses: CourseEnrollment[] = [
     status: "completed",
   },
 ];
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.4,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
 
 function MyLearningContent() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -198,7 +221,6 @@ function MyLearningContent() {
 
   const handleTabChange = (tab: TabType) => {
     setActiveTab(tab);
-    // Update URL without reload
     const url = new URL(window.location.href);
     url.searchParams.set("tab", tab);
     window.history.pushState({}, "", url.toString());
@@ -210,86 +232,65 @@ function MyLearningContent() {
     <div className="min-h-screen bg-white dark:bg-black">
       <BerandaNavbar />
 
-      {/* Page Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <PageHeader
-          title="Kelas Saya"
-          description="Lanjutkan perjalanan belajarmu dan raih mimpimu."
-        />
+      {/* Page Header */}
+      <PageHeader
+        title="Kelas Saya"
+        description="Lanjutkan perjalanan belajarmu dan raih mimpimu."
+      />
 
-        {/* Stats Bar */}
-        <StatsBar
-          totalEnrolled={stats.totalEnrolled}
-          totalCompleted={stats.totalCompleted}
-          totalHoursLearned={stats.totalHoursLearned}
-        />
+      {/* Tab Navigation */}
+      <TabNavigation
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+        inProgressCount={inProgressCourses.length}
+        completedCount={completedCourses.length}
+      />
 
-        {/* Tab Navigation */}
-        <TabNavigation
-          activeTab={activeTab}
-          onTabChange={handleTabChange}
-          inProgressCount={inProgressCourses.length}
-          completedCount={completedCourses.length}
-        />
+      {/* Stats Bar */}
+      <StatsBar
+        totalEnrolled={stats.totalEnrolled}
+        totalCompleted={stats.totalCompleted}
+        totalHoursLearned={stats.totalHoursLearned}
+      />
 
-        {/* Tab Content */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-          >
-            {isDataLoading ? (
-              /* Loading Skeleton */
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
-                {[...Array(4)].map((_, i) => (
-                  <CourseCardSkeleton key={i} />
-                ))}
-              </div>
-            ) : currentCourses.length === 0 ? (
-              /* Empty State */
-              <EmptyState tab={activeTab} />
-            ) : (
-              /* Course Grid */
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
-                {activeTab === "in-progress" ? (
-                  inProgressCourses.map((course, index) => (
-                    <motion.div
-                      key={course.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{
-                        duration: 0.4,
-                        ease: [0.22, 1, 0.36, 1],
-                        delay: index * 0.08,
-                      }}
-                    >
-                      <CourseCardInProgress enrollment={course} />
-                    </motion.div>
-                  ))
-                ) : (
-                  completedCourses.map((course, index) => (
-                    <motion.div
-                      key={course.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{
-                        duration: 0.4,
-                        ease: [0.22, 1, 0.36, 1],
-                        delay: index * 0.08,
-                      }}
-                    >
-                      <CourseCardCompleted enrollment={course} />
-                    </motion.div>
-                  ))
-                )}
-              </div>
-            )}
-          </motion.div>
-        </AnimatePresence>
-      </div>
+      {/* Main Content */}
+      <section className="py-8 bg-white dark:bg-black">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          {isDataLoading ? (
+            /* Loading Skeleton */
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+              {[...Array(4)].map((_, i) => (
+                <CourseCardSkeleton key={i} />
+              ))}
+            </div>
+          ) : currentCourses.length === 0 ? (
+            /* Empty State */
+            <EmptyState tab={activeTab} />
+          ) : (
+            /* Course Grid */
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
+            >
+              {activeTab === "in-progress" ? (
+                inProgressCourses.map((course) => (
+                  <motion.div key={course.id} variants={cardVariants}>
+                    <CourseCardInProgress enrollment={course} />
+                  </motion.div>
+                ))
+              ) : (
+                completedCourses.map((course) => (
+                  <motion.div key={course.id} variants={cardVariants}>
+                    <CourseCardCompleted enrollment={course} />
+                  </motion.div>
+                ))
+              )}
+            </motion.div>
+          )}
+        </div>
+      </section>
 
       <Footer />
     </div>

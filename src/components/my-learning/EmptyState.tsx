@@ -24,27 +24,24 @@ export default function EmptyState({ tab }: EmptyStateProps) {
   const content = tabContent[tab];
 
   return (
-    <div className="flex flex-col items-center justify-center py-16 sm:py-20 lg:py-24 text-center px-4">
-      {/* Icon */}
-      <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-6">
-        <BookOpen className="w-10 h-10 sm:w-12 sm:h-12 text-neutral-300 dark:text-neutral-600" />
+    <section className="py-16 bg-white dark:bg-black">
+      <div className="max-w-md mx-auto text-center px-4">
+        <div className="w-48 h-48 mx-auto mb-6 text-neutral-300 dark:text-neutral-700">
+          <BookOpen className="w-full h-full" />
+        </div>
+        <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">
+          {content.title}
+        </h3>
+        <p className="text-base text-neutral-600 dark:text-white/50 mb-8">
+          {content.subtitle}
+        </p>
+        <Link
+          href="/products"
+          className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full bg-primary text-neutral-900 text-base font-semibold hover:bg-primary-dark active:scale-95 transition-all duration-200"
+        >
+          Cari Kelas Sekarang
+        </Link>
       </div>
-
-      {/* Text */}
-      <h3 className="text-xl sm:text-2xl font-semibold text-neutral-700 dark:text-white mb-2">
-        {content.title}
-      </h3>
-      <p className="text-sm sm:text-base text-neutral-500 dark:text-white/50 mb-8 max-w-sm">
-        {content.subtitle}
-      </p>
-
-      {/* CTA Button */}
-      <Link
-        href="/products"
-        className="px-8 py-3 rounded-full bg-primary text-neutral-900 text-base font-semibold hover:bg-primary-dark active:scale-95 transition-all duration-200"
-      >
-        Cari Kelas Sekarang
-      </Link>
-    </div>
+    </section>
   );
 }
