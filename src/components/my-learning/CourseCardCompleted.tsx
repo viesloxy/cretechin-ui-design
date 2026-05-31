@@ -37,7 +37,6 @@ export default function CourseCardCompleted({ enrollment }: CourseCardCompletedP
             alt={title}
             className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
           />
-          <div className="absolute inset-0 bg-primary/5" />
           <div className="absolute top-3 left-3">
             <span className="px-3 py-1 rounded-full text-xs font-semibold bg-primary text-neutral-900 flex items-center gap-1.5">
               <CheckCircle className="w-3.5 h-3.5" />
