@@ -16,9 +16,9 @@ interface OrderItem {
 interface PaymentSuccessProps {
   amount: number;
   methodName: string;
-  _orderId: string;
+  orderId: string;
   items: OrderItem[];
-  _subtotal: number;
+  subtotal: number;
   shipping: number;
 }
 
@@ -36,9 +36,9 @@ function formatDate(date: Date): string {
 export default function PaymentSuccess({
   amount,
   methodName,
-  _orderId,
+  orderId,
   items,
-  _subtotal,
+  subtotal,
   shipping,
 }: PaymentSuccessProps) {
   const now = new Date();
