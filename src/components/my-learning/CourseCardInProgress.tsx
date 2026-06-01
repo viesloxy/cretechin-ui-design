@@ -21,7 +21,7 @@ interface CourseCardInProgressProps {
 }
 
 export default function CourseCardInProgress({ enrollment }: CourseCardInProgressProps) {
-  const { courseId, title, instructor, thumbnail, progress, totalModules, completedModules, totalDuration } = enrollment;
+  const { id, title, instructor, thumbnail, progress, totalModules, completedModules, totalDuration } = enrollment;
 
   return (
     <motion.div
@@ -84,7 +84,7 @@ export default function CourseCardInProgress({ enrollment }: CourseCardInProgres
 
         {/* CTA Button */}
         <Link
-          href={`/courses/${courseId}`}
+          href={`/courses/${id}`}
           className="flex items-center justify-center gap-2 w-full py-2.5 sm:py-3 rounded-full bg-primary text-neutral-900 text-sm sm:text-base font-semibold hover:bg-primary-dark active:scale-95 transition-all duration-200"
         >
           <Play className="w-4 h-4" />
