@@ -44,13 +44,7 @@ export default function AccordionModule({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-      className={`
-        rounded-xl border overflow-hidden
-        ${activeLesson || isOpen
-          ? "border-primary shadow-sm shadow-primary/10"
-          : "border-black/5 dark:border-white/10"
-        }
-      `}
+      className="rounded-xl bg-white dark:bg-neutral-900 overflow-hidden"
     >
       {/* Module Header */}
       <button
@@ -59,8 +53,8 @@ export default function AccordionModule({
         className="w-full flex items-start gap-3 p-4 bg-white dark:bg-neutral-900 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors cursor-pointer"
       >
         {/* Module Icon */}
-        <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center p-1.5">
-          <BookOpen className="w-5 h-5 text-primary" />
+        <div className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center p-1.5">
+          <BookOpen className="w-5 h-5 text-neutral-900 dark:text-white" />
         </div>
 
         {/* Title & Duration */}
@@ -68,7 +62,7 @@ export default function AccordionModule({
           <h3 className="text-sm sm:text-base font-semibold text-neutral-800 dark:text-white leading-tight">
             {title}
           </h3>
-          <p className="text-xs text-neutral-400 dark:text-white/30 mt-0.5">
+          <p className="text-xs text-neutral-500 dark:text-white/50 mt-0.5">
             {duration}
           </p>
         </div>
@@ -79,7 +73,7 @@ export default function AccordionModule({
           transition={{ duration: 0.3 }}
           className="flex-shrink-0 mt-0.5"
         >
-          <ChevronDown className="w-4 h-4 text-neutral-400 dark:text-white/30" />
+          <ChevronDown className="w-4 h-4 text-neutral-500 dark:text-white/50" />
         </motion.div>
       </button>
 
@@ -94,7 +88,7 @@ export default function AccordionModule({
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="overflow-hidden"
           >
-            <div className="border-t border-black/5 dark:border-white/10 bg-neutral-50/50 dark:bg-neutral-800/30">
+            <div className="bg-neutral-50/50 dark:bg-neutral-800/30">
               {lessons.map((lesson) => (
                 <LessonItem
                   key={lesson.id}

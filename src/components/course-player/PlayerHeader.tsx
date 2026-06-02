@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowLeft, Bell } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
+import { ArrowLeft, Sun, Moon } from "lucide-react";
+import { useTheme } from "@/components/providers/ThemeProvider";
 
 export default function PlayerHeader() {
-  const { user } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <motion.header
@@ -25,30 +25,29 @@ export default function PlayerHeader() {
           <span className="hidden sm:inline">Kembali</span>
         </Link>
 
-        {/* Right Side Actions */}
-        <div className="flex items-center gap-3">
-          {/* Notification Bell */}
-          <button
-            type="button"
-            className="relative text-neutral-500 dark:text-white/50 hover:text-primary transition-colors p-1"
-            aria-label="Notifications"
-          >
-            <Bell className="w-5 h-5" />
-            {/* Optional badge */}
-            <span className="absolute top-0 right-0 w-2 h-2 bg-primary rounded-full" />
-          </button>
-
-          {/* Profile Avatar */}
-          <button
-            type="button"
-            className="w-8 h-8 rounded-full border-2 border-primary overflow-hidden hover:opacity-80 transition-opacity"
-            aria-label="Profile"
-          >
-            <div className="w-full h-full bg-primary flex items-center justify-center text-neutral-900 text-xs font-bold">
-              {user?.name?.charAt(0).toUpperCase() || "U"}
-            </div>
-          </button>
-        </div>
+        {/* Theme Toggle */}
+        <button
+          onClick={toggleTheme}
+          className="relative w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 bg-black/5 dark:bg-white/10"
+          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+        >
+          <div className="relative w-5 h-5">
+            <Sun
+              className={`absolute inset-0 w-5 h-5 transition-all duration-300 ${
+                theme === "light"
+                  ? "opacity-100 rotate-0 scale-100"
+                  : "opacity-0 rotate-90 scale-0"
+              } text-black`}
+            />
+            <Moon
+              className={`absolute inset-0 w-5 h-5 transition-all duration-300 ${
+                theme === "dark"
+                  ? "opacity-100 rotate-0 scale-100"
+                  : "opacity-0 -rotate-90 scale-0"
+              } text-white`}
+            />
+          </div>
+        </button>
       </div>
     </motion.header>
   );
