@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { ArrowLeft, AlertCircle } from "lucide-react";
@@ -254,12 +254,11 @@ function CertificateDetailContent({ certificateId }: { certificateId: string }) 
 export default function CertificateDetailPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  const resolvedParams = use(params);
   return (
     <AuthProvider>
-      <CertificateDetailContent certificateId={resolvedParams.id} />
+      <CertificateDetailContent certificateId={params.id} />
     </AuthProvider>
   );
 }
