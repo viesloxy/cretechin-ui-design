@@ -118,7 +118,7 @@ export default function AssetLibraryCard({
           {title}
         </h3>
         <p className="text-sm text-neutral-500 dark:text-white/50 mb-3 line-clamp-1">
-          {creator}
+          {creator.studio ? `${creator.name} · ${creator.studio}` : creator.name}
         </p>
 
         {/* Meta: Purchase date & download count */}

@@ -65,7 +65,7 @@ export default function AssetLibraryRow({
           {title}
         </h3>
         <p className="text-sm text-neutral-500 dark:text-white/50 line-clamp-1 mb-2">
-          {creator}
+          {creator.studio ? `${creator.name} · ${creator.studio}` : creator.name}
         </p>
         <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-neutral-400 dark:text-white/40">
           <span className="px-2 py-0.5 rounded-md bg-neutral-100 dark:bg-neutral-800 font-semibold text-neutral-600 dark:text-white/60">
