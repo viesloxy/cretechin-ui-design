@@ -48,7 +48,7 @@ export default function EventTitleBlock({ event }: EventTitleBlockProps) {
         )}
         {event.isFeatured && (
           <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-primary text-neutral-900">
-            ★ Featured
+             Featured
           </span>
         )}
       </div>
