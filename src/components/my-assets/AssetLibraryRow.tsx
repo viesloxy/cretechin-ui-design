@@ -2,14 +2,14 @@
 
 import { motion } from "framer-motion";
 import { Download, Eye, ExternalLink, Heart, Calendar } from "lucide-react";
-import type { AssetLibraryItem } from "./types";
+import type { OwnedAsset } from "./types";
 
 interface AssetLibraryRowProps {
-  asset: AssetLibraryItem;
-  onDownload: (assetId: string) => void;
-  onPreview: (assetId: string) => void;
-  onViewDetail: (assetId: string) => void;
-  onToggleFavorite: (assetId: string) => void;
+  asset: OwnedAsset;
+  onDownload?: (assetId: string) => void;
+  onPreview?: (assetId: string) => void;
+  onViewDetail?: (assetId: string) => void;
+  onToggleFavorite?: (assetId: string) => void;
 }
 
 function formatDate(iso: string): string {
@@ -33,11 +33,12 @@ export default function AssetLibraryRow({
     title,
     creator,
     fileType,
-    fileSize,
-    thumbnail,
-    purchasedAt,
-    isFavorite,
+    fileSizeLabel,
+    previewImage,
+    purchaseDate,
   } = asset;
+
+  const isFavorite = false;
 
   return (
     <motion.div
@@ -48,7 +49,7 @@ export default function AssetLibraryRow({
       {/* Thumbnail */}
       <div className="relative w-full sm:w-24 sm:h-24 h-40 flex-shrink-0 rounded-xl overflow-hidden bg-neutral-200 dark:bg-neutral-800">
         <img
-          src={thumbnail}
+          src={previewImage}
           alt={title}
           className="w-full h-full object-cover"
         />
@@ -68,13 +69,13 @@ export default function AssetLibraryRow({
           {creator.studio ? `${creator.name} · ${creator.studio}` : creator.name}
         </p>
         <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-neutral-400 dark:text-white/40">
-          <span className="px-2 py-0.5 rounded-md bg-neutral-100 dark:bg-neutral-800 font-semibold text-neutral-600 dark:text-white/60">
+          <span className="px-2 py-0.5 rounded-md bg-neutral-100 dark:bg-neutral-800 font-semibold text-neutral-600 dark:text-white/60 capitalize">
             {fileType}
           </span>
-          <span>{fileSize}</span>
+          <span>{fileSizeLabel}</span>
           <span className="flex items-center gap-1">
             <Calendar className="w-3 h-3.5" />
-            {formatDate(purchasedAt)}
+            {formatDate(purchaseDate)}
           </span>
         </div>
       </div>
@@ -82,7 +83,7 @@ export default function AssetLibraryRow({
       {/* Actions */}
       <div className="flex flex-row sm:flex-row items-stretch sm:items-center gap-2 mt-2 sm:mt-0">
         <button
-          onClick={() => onToggleFavorite(id)}
+          onClick={() => onToggleFavorite?.(id)}
           aria-label={isFavorite ? "Hapus dari favorit" : "Tambah ke favorit"}
           className={`w-10 h-10 flex-shrink-0 rounded-full border flex items-center justify-center transition-colors ${
             isFavorite
@@ -93,21 +94,21 @@ export default function AssetLibraryRow({
           <Heart className={`w-4 h-4 ${isFavorite ? "fill-current" : ""}`} />
         </button>
         <button
-          onClick={() => onPreview(id)}
+          onClick={() => onPreview?.(id)}
           aria-label="Preview"
           className="hidden sm:flex w-10 h-10 flex-shrink-0 rounded-full border border-neutral-300 dark:border-white/20 text-neutral-700 dark:text-white/70 hover:border-primary hover:text-primary items-center justify-center transition-colors"
         >
           <Eye className="w-4 h-4" />
         </button>
         <button
-          onClick={() => onViewDetail(id)}
+          onClick={() => onViewDetail?.(id)}
           aria-label="Lihat detail"
           className="hidden sm:flex w-10 h-10 flex-shrink-0 rounded-full border border-neutral-300 dark:border-white/20 text-neutral-700 dark:text-white/70 hover:border-primary hover:text-primary items-center justify-center transition-colors"
         >
           <ExternalLink className="w-4 h-4" />
         </button>
         <button
-          onClick={() => onDownload(id)}
+          onClick={() => onDownload?.(id)}
           aria-label={`Unduh ${title}`}
           className="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-full bg-primary text-neutral-900 text-sm font-semibold hover:bg-primary-dark active:scale-95 transition-all duration-200"
         >

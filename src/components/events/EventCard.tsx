@@ -5,14 +5,6 @@ import { motion } from "framer-motion";
 import { Calendar, Clock, Users, Eye, Play, LogIn, Radio } from "lucide-react";
 import type { EventCardProps, EventTab } from "./types";
 
-const TYPE_BADGE: Record<string, string> = {
-  webinar: "bg-primary/90 text-white",
-  workshop: "bg-blue-500 text-white",
-  meetup: "bg-purple-500 text-white",
-  conference: "bg-orange-500 text-white",
-  networking: "bg-teal-500 text-white",
-};
-
 const TYPE_LABELS: Record<string, string> = {
   webinar: "Webinar",
   workshop: "Workshop",
@@ -29,7 +21,6 @@ export default function EventCard({
   onWatchRecording,
 }: EventCardProps) {
   const isLive = event.status === "live";
-  const typeBadgeColor = TYPE_BADGE[event.type] ?? TYPE_BADGE.webinar;
   const typeLabel = TYPE_LABELS[event.type] ?? event.type;
 
   const renderActionButton = () => {
@@ -48,8 +39,8 @@ export default function EventCard({
         return (
           <button
             onClick={() => onJoinRoom?.(event.id)}
-            className={`w-full py-2.5 rounded-full bg-income text-white text-sm font-semibold hover:brightness-110 transition-all flex items-center justify-center gap-2 ${
-              isLive ? "animate-pulse shadow-lg shadow-income/30" : ""
+            className={`w-full py-2.5 rounded-full bg-primary text-neutral-900 text-sm font-semibold hover:bg-primary-dark transition-all flex items-center justify-center gap-2 ${
+              isLive ? "animate-pulse" : ""
             }`}
           >
             {isLive ? <Radio className="w-4 h-4" /> : <LogIn className="w-4 h-4" />}
@@ -60,7 +51,7 @@ export default function EventCard({
         return (
           <button
             onClick={() => onWatchRecording?.(event.id)}
-            className="w-full py-2.5 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-sm font-semibold hover:brightness-110 transition-all flex items-center justify-center gap-2"
+            className="w-full py-2.5 rounded-full bg-primary text-neutral-900 text-sm font-semibold hover:bg-primary-dark transition-all flex items-center justify-center gap-2"
           >
             <Play className="w-4 h-4" />
             Tonton Ulang
@@ -84,19 +75,17 @@ export default function EventCard({
           className="object-cover transition-transform duration-300 hover:scale-105"
         />
 
-        {/* Type Badge (top-left) */}
+        {/* Type Badge (top-left) — lime theme */}
         <div className="absolute top-3 left-3">
-          <span
-            className={`px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide shadow-md ${typeBadgeColor}`}
-          >
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide shadow-md bg-primary text-neutral-900">
             {typeLabel}
           </span>
         </div>
 
-        {/* Live / Status Badge (top-right) */}
+        {/* Live / Status Badge (top-right) — lime theme */}
         {isLive && tab !== "upcoming" && (
           <div className="absolute top-3 right-3">
-            <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide shadow-md bg-red-500 text-white animate-pulse">
+            <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide shadow-md bg-primary text-neutral-900 animate-pulse">
               Live Now
             </span>
           </div>
@@ -165,7 +154,7 @@ export default function EventCard({
             </span>
             <span
               className={`font-semibold ${
-                event.price === 0 ? "text-income" : "text-primary"
+                event.price === 0 ? "text-primary" : "text-primary"
               }`}
             >
               {event.priceDisplay}

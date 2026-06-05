@@ -16,14 +16,14 @@ export default function PageHeader({ title, description }: PageHeaderProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-medium tracking-tight text-neutral-900 dark:text-white">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-medium tracking-tight text-neutral-900 dark:text-white mb-4">
             {title}
           </h1>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="text-sm sm:text-base text-neutral-500 dark:text-white/50 mt-1"
+            className="text-base max-w-2xl text-neutral-600 dark:text-white/50"
           >
             {description}
           </motion.p>
