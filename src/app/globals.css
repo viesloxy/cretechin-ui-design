@@ -133,3 +133,12 @@ html.dark ::-webkit-scrollbar-thumb {
     background-color: var(--savings-complete);
   }
 }
+
+/* Hide scrollbar utility (used for horizontal scroll containers) */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

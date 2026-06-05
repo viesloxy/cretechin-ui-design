@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { ArrowLeft } from "lucide-react";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { BerandaNavbar } from "@/components/beranda";
 import { Footer } from "@/components/landing-page";
 import {
-  Breadcrumb,
   ProductGallery,
   ProductInfo,
   StickyPurchaseCard,
@@ -219,14 +219,18 @@ function ProductDetailContent() {
     <main className="min-h-screen bg-white dark:bg-black pb-24 lg:pb-0">
       <BerandaNavbar />
 
-      {/* Breadcrumb */}
-      <Breadcrumb
-        items={[
-          { label: "Beranda", href: "/beranda" },
-          { label: "Katalog", href: "/products" },
-          { label: product.title },
-        ]}
-      />
+      {/* Back Navigation */}
+      <section className="bg-white dark:bg-black">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 pb-2 sm:pt-8 sm:pb-4">
+          <button
+            onClick={() => router.push("/products")}
+            className="flex items-center gap-2 text-sm font-medium text-neutral-600 dark:text-white/60 hover:text-primary transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Kembali ke Katalog Produk</span>
+          </button>
+        </div>
+      </section>
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-12">
