@@ -6,13 +6,14 @@ import { twMerge } from "tailwind-merge";
 interface AuthInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
+  helper?: string;
   prefixIcon?: React.ReactNode;
   suffixIcon?: React.ReactNode;
   onSuffixClick?: () => void;
 }
 
 const AuthInput = forwardRef<HTMLInputElement, AuthInputProps>(
-  ({ label, error, prefixIcon, suffixIcon, onSuffixClick, className, ...props }, ref) => {
+  ({ label, error, helper, prefixIcon, suffixIcon, onSuffixClick, className, ...props }, ref) => {
     return (
       <div className="space-y-2">
         {label && (
@@ -51,6 +52,7 @@ const AuthInput = forwardRef<HTMLInputElement, AuthInputProps>(
           )}
         </div>
         {error && <p className="text-xs text-[#FF5252]">{error}</p>}
+        {!error && helper && <p className="text-xs text-neutral-500 dark:text-white/40">{helper}</p>}
       </div>
     );
   }
