@@ -2,57 +2,48 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, ArrowUpDown } from "lucide-react";
-import type { CategoryFilter } from "./LibraryStatsBar";
+import {
+  Search,
+  CalendarRange,
+  MonitorPlay,
+  Wrench,
+  Users,
+  Building2,
+  Network,
+  ArrowUpDown,
+} from "lucide-react";
+import type { EventCategory, EventSort, FilterBarProps } from "./types";
 
-export type ViewMode = "grid" | "list";
-
-interface LibraryFilterBarProps {
-  activeCategory: CategoryFilter;
-  onCategoryChange: (category: CategoryFilter) => void;
-  searchQuery: string;
-  onSearchChange: (query: string) => void;
-  sortBy: string;
-  onSortChange: (sort: string) => void;
-  viewMode: ViewMode;
-  onViewModeChange: (mode: ViewMode) => void;
-  resultCount: number;
-  totalCount: number;
-  categoryCounts: Record<CategoryFilter, number>;
-}
-
-const categories: { label: string; value: CategoryFilter }[] = [
-  { label: "Semua", value: "all" },
-  { label: "UI Kit", value: "ui-kit" },
-  { label: "Template", value: "template" },
-  { label: "Mockup", value: "mockup" },
-  { label: "Icon", value: "icon" },
-  { label: "Font", value: "font" },
-  { label: "Ilustrasi", value: "illustration" },
-  { label: "Source Code", value: "source-code" },
+const categories: {
+  label: string;
+  value: EventCategory;
+  icon: typeof CalendarRange;
+}[] = [
+  { label: "Semua", value: "all", icon: CalendarRange },
+  { label: "Webinar", value: "webinar", icon: MonitorPlay },
+  { label: "Workshop", value: "workshop", icon: Wrench },
+  { label: "Meetup", value: "meetup", icon: Users },
+  { label: "Conference", value: "conference", icon: Building2 },
+  { label: "Networking", value: "networking", icon: Network },
 ];
 
-const sortOptions = [
-  { label: "Terbaru", value: "newest" },
-  { label: "Terlama", value: "oldest" },
-  { label: "Nama A-Z", value: "name-asc" },
-  { label: "Nama Z-A", value: "name-desc" },
-  { label: "Terpopuler", value: "popular" },
+const sortOptions: { label: string; value: EventSort }[] = [
+  { label: "Paling Dekat", value: "soonest" },
+  { label: "Terbaru", value: "latest" },
+  { label: "Populer", value: "popular" },
 ];
 
-export default function LibraryFilterBar({
+export default function FilterBar({
   activeCategory,
   onCategoryChange,
   searchQuery,
   onSearchChange,
   sortBy,
   onSortChange,
-  viewMode,
-  onViewModeChange,
   resultCount,
   totalCount,
   categoryCounts,
-}: LibraryFilterBarProps) {
+}: FilterBarProps) {
   const [isSortOpen, setIsSortOpen] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);
 
@@ -66,7 +57,8 @@ export default function LibraryFilterBar({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const currentSortLabel = sortOptions.find((opt) => opt.value === sortBy)?.label ?? "Urutkan";
+  const currentSortLabel =
+    sortOptions.find((opt) => opt.value === sortBy)?.label ?? "Urutkan";
 
   return (
     <section className="bg-white dark:bg-black border-b border-black/5 dark:border-white/5">
@@ -75,6 +67,7 @@ export default function LibraryFilterBar({
         <div className="py-4 overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 sm:overflow-visible">
           <div className="flex gap-2 sm:flex-wrap min-w-max sm:min-w-0">
             {categories.map((category) => {
+              const Icon = category.icon;
               const isActive = activeCategory === category.value;
               const count = categoryCounts[category.value] ?? 0;
               return (
@@ -88,6 +81,7 @@ export default function LibraryFilterBar({
                       : "bg-white dark:bg-neutral-900 border border-black/10 dark:border-white/10 text-neutral-700 dark:text-white/70 hover:border-primary hover:text-primary"
                   }`}
                 >
+                  <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
                   <span>{category.label}</span>
                   {category.value !== "all" && count > 0 && (
                     <span
@@ -106,54 +100,27 @@ export default function LibraryFilterBar({
           </div>
         </div>
 
-        {/* Search & Sort */}
+        {/* Search & Sort Row */}
         <div className="flex items-center justify-between gap-3 pb-4">
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
             <input
               type="text"
-              placeholder="Cari aset..."
+              placeholder="Cari acara, pembicara, atau topik..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 rounded-full border border-black/10 dark:border-white/10 bg-white dark:bg-neutral-900 text-sm text-neutral-700 dark:text-white/80 placeholder:text-neutral-400 focus:outline-none focus:border-primary transition-colors"
             />
           </div>
 
-          <div className="flex items-center gap-2">
-            {/* View Mode Toggle */}
-            <div className="hidden sm:inline-flex items-center bg-white dark:bg-neutral-900 border border-black/10 dark:border-white/10 rounded-full p-1">
-              <button
-                onClick={() => onViewModeChange("grid")}
-                aria-label="Tampilan grid"
-                className={`p-2 rounded-full transition-colors ${
-                  viewMode === "grid"
-                    ? "bg-primary text-neutral-900"
-                    : "text-neutral-500 dark:text-white/50 hover:text-primary"
-                }`}
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <rect x="3" y="3" width="7" height="7" rx="1" />
-                  <rect x="14" y="3" width="7" height="7" rx="1" />
-                  <rect x="3" y="14" width="7" height="7" rx="1" />
-                  <rect x="14" y="14" width="7" height="7" rx="1" />
-                </svg>
-              </button>
-              <button
-                onClick={() => onViewModeChange("list")}
-                aria-label="Tampilan list"
-                className={`p-2 rounded-full transition-colors ${
-                  viewMode === "list"
-                    ? "bg-primary text-neutral-900"
-                    : "text-neutral-500 dark:text-white/50 hover:text-primary"
-                }`}
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
-                </svg>
-              </button>
-            </div>
+          <div className="flex items-center gap-3">
+            <span className="hidden sm:inline text-xs sm:text-sm text-neutral-500 dark:text-white/50 whitespace-nowrap">
+              <span className="font-semibold text-neutral-900 dark:text-white">
+                {resultCount}
+              </span>{" "}
+              / {totalCount} acara
+            </span>
 
-            {/* Sort Dropdown - styled like /products */}
             <div className="relative" ref={sortRef}>
               <button
                 onClick={() => setIsSortOpen(!isSortOpen)}

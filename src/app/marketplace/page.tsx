@@ -17,7 +17,6 @@ import LibraryEmptyState from "@/components/my-assets/LibraryEmptyState";
 import {
   type OwnedAsset,
   type AssetCategory,
-  type SortOption,
   type ViewMode,
   ASSET_CATEGORY_ORDER,
   ASSET_CATEGORY_LABELS,
@@ -33,7 +32,7 @@ const MOCK_OWNED_ASSETS: OwnedAsset[] = [
     fileSize: 12_500_000,
     fileSizeLabel: "12 MB",
     version: "v2.1.0",
-    previewImage: "/images/marketplace/ui-kit-1.webp",
+    previewImage: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&q=80",
     creator: { name: "Raka Pratama", studio: "Pixel Studio" },
     purchaseDate: "2026-05-20T10:00:00Z",
     purchaseDateLabel: "20 Mei 2026",
@@ -54,7 +53,7 @@ const MOCK_OWNED_ASSETS: OwnedAsset[] = [
     fileSize: 8_200_000,
     fileSizeLabel: "8.2 MB",
     version: "v1.0.0",
-    previewImage: "/images/marketplace/template-1.webp",
+    previewImage: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
     creator: { name: "Siti Aminah", studio: "DesignBox" },
     purchaseDate: "2026-05-15T14:00:00Z",
     purchaseDateLabel: "15 Mei 2026",
@@ -75,7 +74,7 @@ const MOCK_OWNED_ASSETS: OwnedAsset[] = [
     fileSize: 24_000_000,
     fileSizeLabel: "24 MB",
     version: "v1.2.0",
-    previewImage: "/images/marketplace/mockup-1.webp",
+    previewImage: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80",
     creator: { name: "Andi Wijaya" },
     purchaseDate: "2026-05-10T09:00:00Z",
     purchaseDateLabel: "10 Mei 2026",
@@ -96,7 +95,7 @@ const MOCK_OWNED_ASSETS: OwnedAsset[] = [
     fileSize: 2_100_000,
     fileSizeLabel: "2.1 MB",
     version: "v3.0.0",
-    previewImage: "/images/marketplace/icons-1.webp",
+    previewImage: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80",
     creator: { name: "Rina Marlina", studio: "IconLab" },
     purchaseDate: "2026-05-05T16:00:00Z",
     purchaseDateLabel: "5 Mei 2026",
@@ -117,7 +116,7 @@ const MOCK_OWNED_ASSETS: OwnedAsset[] = [
     fileSize: 18_500_000,
     fileSizeLabel: "18 MB",
     version: "v1.5.0",
-    previewImage: "/images/marketplace/illustration-1.webp",
+    previewImage: "https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=800&q=80",
     creator: { name: "Dimas Saputra" },
     purchaseDate: "2026-04-28T11:00:00Z",
     purchaseDateLabel: "28 Apr 2026",
@@ -138,7 +137,7 @@ const MOCK_OWNED_ASSETS: OwnedAsset[] = [
     fileSize: 850_000,
     fileSizeLabel: "850 KB",
     version: "v1.0.0",
-    previewImage: "/images/marketplace/font-1.webp",
+    previewImage: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80",
     creator: { name: "Rasmus Andersson" },
     purchaseDate: "2026-04-20T13:00:00Z",
     purchaseDateLabel: "20 Apr 2026",
@@ -159,7 +158,7 @@ const MOCK_OWNED_ASSETS: OwnedAsset[] = [
     fileSize: 4_500_000,
     fileSizeLabel: "4.5 MB",
     version: "v2.0.0",
-    previewImage: "/images/marketplace/code-1.webp",
+    previewImage: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
     creator: { name: "Fajar Nugroho", studio: "DevKit" },
     purchaseDate: "2026-04-15T15:00:00Z",
     purchaseDateLabel: "15 Apr 2026",
@@ -180,7 +179,7 @@ const MOCK_OWNED_ASSETS: OwnedAsset[] = [
     fileSize: 15_000_000,
     fileSizeLabel: "15 MB",
     version: "v1.3.0",
-    previewImage: "/images/marketplace/ui-kit-2.webp",
+    previewImage: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80",
     creator: { name: "Maya Sari", studio: "Pixel Studio" },
     purchaseDate: "2026-04-10T10:00:00Z",
     purchaseDateLabel: "10 Apr 2026",
@@ -201,7 +200,7 @@ const MOCK_OWNED_ASSETS: OwnedAsset[] = [
     fileSize: 3_200_000,
     fileSizeLabel: "3.2 MB",
     version: "v1.0.0",
-    previewImage: "/images/marketplace/template-2.webp",
+    previewImage: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&q=80",
     creator: { name: "Bayu Setiawan" },
     purchaseDate: "2026-04-01T12:00:00Z",
     purchaseDateLabel: "1 Apr 2026",
@@ -223,7 +222,7 @@ function MyAssetsContent() {
   const [assets] = useState<OwnedAsset[]>(MOCK_OWNED_ASSETS);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<AssetCategory | "all">("all");
-  const [sortBy, setSortBy] = useState<SortOption>("newest");
+  const [sortBy, setSortBy] = useState<string>("newest");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
 
   // Hitung statistik
@@ -320,8 +319,6 @@ function MyAssetsContent() {
         <PageHeader
           title="Aset Digital Saya"
           description="Kumpulan aset digital yang telah kamu beli dan siap digunakan."
-          showBackButton
-          backHref="/profile"
         />
 
         {!isLoading && (
