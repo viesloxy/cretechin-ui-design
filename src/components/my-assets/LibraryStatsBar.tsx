@@ -48,7 +48,7 @@ export default function LibraryStatsBar({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="flex flex-wrap items-center gap-4 sm:gap-6 p-4 bg-primary/5 dark:bg-primary/10 border border-primary/20 dark:border-primary/30 rounded-2xl"
+          className="flex flex-wrap items-center gap-4 sm:gap-6 p-4 bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/10 rounded-2xl"
         >
           {/* Total Aset */}
           <div className="flex items-center gap-2">

@@ -8,6 +8,10 @@ import BerandaNavbar from "@/components/beranda/BerandaNavbar";
 import Footer from "@/components/landing-page/Footer";
 import PageHeader from "@/components/my-learning/PageHeader";
 import TabNavigation from "@/components/my-learning/TabNavigation";
+import CategoryFilterBar, {
+  type CourseCategory,
+  type CourseSort,
+} from "@/components/my-learning/CategoryFilterBar";
 import CourseCardInProgress from "@/components/my-learning/CourseCardInProgress";
 import CourseCardCompleted from "@/components/my-learning/CourseCardCompleted";
 import EmptyState from "@/components/my-learning/EmptyState";
@@ -169,6 +173,9 @@ function MyLearningContent() {
   const searchParams = useSearchParams();
 
   const [activeTab, setActiveTab] = useState<TabType>("in-progress");
+  const [activeCategory, setActiveCategory] = useState<CourseCategory>("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeSort, setActiveSort] = useState<CourseSort>("recent");
   const [isDataLoading, setIsDataLoading] = useState(true);
 
   // Initialize tab from URL query param
@@ -213,6 +220,47 @@ function MyLearningContent() {
   const inProgressCourses = mockInProgressCourses;
   const completedCourses = mockCompletedCourses;
 
+  // Filter + sort logic
+  const filterAndSort = (courses: typeof inProgressCourses) => {
+    let result = [...courses];
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(
+        (c) =>
+          c.title.toLowerCase().includes(q) ||
+          c.instructor.toLowerCase().includes(q),
+      );
+    }
+    switch (activeSort) {
+      case "recent":
+        result.sort(
+          (a, b) =>
+            new Date(b.enrolledAt).getTime() - new Date(a.enrolledAt).getTime(),
+        );
+        break;
+      case "oldest":
+        result.sort(
+          (a, b) =>
+            new Date(a.enrolledAt).getTime() - new Date(b.enrolledAt).getTime(),
+        );
+        break;
+      case "title-asc":
+        result.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case "title-desc":
+        result.sort((a, b) => b.title.localeCompare(a.title));
+        break;
+    }
+    return result;
+  };
+
+  const filteredInProgress = filterAndSort(inProgressCourses);
+  const filteredCompleted = filterAndSort(completedCourses);
+  const filteredCourses =
+    activeTab === "in-progress" ? filteredInProgress : filteredCompleted;
+  const totalCourses =
+    activeTab === "in-progress" ? inProgressCourses.length : completedCourses.length;
+
   const stats = {
     totalEnrolled: inProgressCourses.length + completedCourses.length,
     totalCompleted: completedCourses.length,
@@ -225,8 +273,6 @@ function MyLearningContent() {
     url.searchParams.set("tab", tab);
     window.history.pushState({}, "", url.toString());
   };
-
-  const currentCourses = activeTab === "in-progress" ? inProgressCourses : completedCourses;
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
@@ -246,6 +292,18 @@ function MyLearningContent() {
         completedCount={completedCourses.length}
       />
 
+      {/* Category Filter Bar */}
+      <CategoryFilterBar
+        activeCategory={activeCategory}
+        onCategoryChange={setActiveCategory}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        sortBy={activeSort}
+        onSortChange={setActiveSort}
+        resultCount={filteredCourses.length}
+        totalCount={totalCourses}
+      />
+
       {/* Stats Bar */}
       <StatsBar
         totalEnrolled={stats.totalEnrolled}
@@ -263,7 +321,7 @@ function MyLearningContent() {
                 <CourseCardSkeleton key={i} />
               ))}
             </div>
-          ) : currentCourses.length === 0 ? (
+          ) : filteredCourses.length === 0 ? (
             /* Empty State */
             <EmptyState tab={activeTab} />
           ) : (
@@ -275,13 +333,13 @@ function MyLearningContent() {
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
             >
               {activeTab === "in-progress" ? (
-                inProgressCourses.map((course) => (
+                filteredInProgress.map((course) => (
                   <motion.div key={course.id} variants={cardVariants}>
                     <CourseCardInProgress enrollment={course} />
                   </motion.div>
                 ))
               ) : (
-                completedCourses.map((course) => (
+                filteredCompleted.map((course) => (
                   <motion.div key={course.id} variants={cardVariants}>
                     <CourseCardCompleted enrollment={course} />
                   </motion.div>

@@ -344,6 +344,7 @@ function KatalogContent() {
   const [activeTab, setActiveTab] = useState<TabType>("courses");
   const [selectedCategory, setSelectedCategory] = useState<"all" | "technology" | "creative" | "business">("all");
   const [selectedSort, setSelectedSort] = useState("popular");
+  const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -368,10 +369,20 @@ function KatalogContent() {
     return null;
   }
 
-  // Filter courses by category
-  const filteredCourses = mockCourses.filter((course) =>
-    selectedCategory === "all" || course.category === selectedCategory
-  );
+  // Filter courses by category and search
+  const filteredCourses = mockCourses.filter((course) => {
+    const matchesCategory =
+      selectedCategory === "all" || course.category === selectedCategory;
+    if (!matchesCategory) return false;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      return (
+        course.title.toLowerCase().includes(q) ||
+        course.instructor.toLowerCase().includes(q)
+      );
+    }
+    return true;
+  });
 
   // Sort courses
   const sortedCourses = [...filteredCourses].sort((a, b) => {
@@ -394,9 +405,19 @@ function KatalogContent() {
   const paginatedCourses = sortedCourses.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
   // Filter & paginate assets
-  const filteredAssets = mockAssets.filter((asset) =>
-    selectedCategory === "all" || asset.category === selectedCategory
-  );
+  const filteredAssets = mockAssets.filter((asset) => {
+    const matchesCategory =
+      selectedCategory === "all" || asset.category === selectedCategory;
+    if (!matchesCategory) return false;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      return (
+        asset.title.toLowerCase().includes(q) ||
+        asset.creator.toLowerCase().includes(q)
+      );
+    }
+    return true;
+  });
   const totalAssetPages = Math.ceil(filteredAssets.length / ITEMS_PER_PAGE);
   const paginatedAssets = filteredAssets.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
@@ -430,6 +451,10 @@ function KatalogContent() {
             activeCategory={selectedCategory}
             onCategoryChange={setSelectedCategory}
             onSortChange={setSelectedSort}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            resultCount={activeTab === "courses" ? filteredCourses.length : filteredAssets.length}
+            totalCount={activeTab === "courses" ? mockCourses.length : mockAssets.length}
           />
 
           {/* Grid Content */}

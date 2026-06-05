@@ -346,7 +346,6 @@ function MyAssetsContent() {
                 resultCount={filteredAssets.length}
                 totalCount={assets.length}
                 categoryCounts={categoryCounts}
-                categoryLabels={ASSET_CATEGORY_LABELS}
               />
             )}
 

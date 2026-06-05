@@ -82,9 +82,9 @@ export default function LibraryFilterBar({
                   key={category.value}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => onCategoryChange(category.value)}
-                  className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-200 ${
+                  className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-colors duration-200 ${
                     isActive
-                      ? "bg-primary text-neutral-900 shadow-lg shadow-primary/30"
+                      ? "bg-primary text-neutral-900"
                       : "bg-white dark:bg-neutral-900 border border-black/10 dark:border-white/10 text-neutral-700 dark:text-white/70 hover:border-primary hover:text-primary"
                   }`}
                 >
