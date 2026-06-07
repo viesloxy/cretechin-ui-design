@@ -71,6 +71,7 @@ function TransactionsContent() {
   const [loadError, setLoadError] = useState(false);
   const [fetchKey, setFetchKey] = useState(0);
   const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Read filters from URL
   const statusFromUrl = searchParams.get("status") as TransactionStatusFilter | null;
@@ -125,8 +126,17 @@ function TransactionsContent() {
     result = filterByPeriod(result, periodFilter);
     result = filterByType(result, typeFilter);
     result = filterByStatus(result, statusFilter);
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(
+        (t) =>
+          t.invoiceNumber.toLowerCase().includes(q) ||
+          t.itemSummary.toLowerCase().includes(q) ||
+          t.items.some((it) => it.name.toLowerCase().includes(q)),
+      );
+    }
     return result;
-  }, [allTransactions, statusFilter, typeFilter, periodFilter]);
+  }, [allTransactions, statusFilter, typeFilter, periodFilter, searchQuery]);
 
   // Count per status (for tab badges, always over period+type filtered)
   const counts = useMemo(() => {
@@ -253,7 +263,7 @@ function TransactionsContent() {
 
       <main className="flex-1 pb-12">
         <div className="py-4 sm:py-6 md:py-8">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <TransactionsSummaryCards
               summary={summary}
               isLoading={isDataLoading}
@@ -266,7 +276,14 @@ function TransactionsContent() {
             period={periodFilter}
             onTypeChange={handleTypeChange}
             onPeriodChange={handlePeriodChange}
-            onReset={handleResetFilters}
+            onReset={() => {
+              setSearchQuery("");
+              handleResetFilters();
+            }}
+            resultCount={filtered.length}
+            totalCount={allTransactions.length}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
           />
 
           <TransactionStatusTabs
@@ -275,7 +292,7 @@ function TransactionsContent() {
             counts={counts}
           />
 
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
             {loadError ? (
               <TransactionsErrorState
                 onRetry={() => setFetchKey((k) => k + 1)}
@@ -295,7 +312,7 @@ function TransactionsContent() {
             ) : (
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={`${statusFilter}-${typeFilter}-${periodFilter}`}
+                  key={`${statusFilter}-${typeFilter}-${periodFilter}-${searchQuery}`}
                   id="transactions-list-panel"
                   role="tabpanel"
                   aria-live="polite"

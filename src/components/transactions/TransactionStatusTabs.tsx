@@ -36,7 +36,7 @@ export default function TransactionStatusTabs({
 }: TransactionStatusTabsProps) {
   return (
     <section className="bg-white dark:bg-black border-b border-black/5 dark:border-white/5">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div
           role="tablist"
           aria-label="Filter status transaksi"

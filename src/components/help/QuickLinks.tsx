@@ -19,14 +19,14 @@ export default function QuickLinks() {
   return (
     <section
       aria-labelledby="quicklinks-heading"
-      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12"
+      className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14 md:py-16"
     >
       <motion.h2
         id="quicklinks-heading"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="text-xl sm:text-2xl font-semibold tracking-tight text-neutral-900 dark:text-white mb-6"
+        className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-neutral-900 dark:text-white mb-6"
       >
         Sumber Daya Lainnya
       </motion.h2>

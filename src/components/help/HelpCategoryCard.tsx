@@ -41,14 +41,7 @@ export default function HelpCategoryCard({
           : "border-black/5 dark:border-white/10 hover:border-primary/30",
       )}
     >
-      <div
-        className={twMerge(
-          "w-12 h-12 rounded-xl flex items-center justify-center mb-3 sm:mb-4",
-          isActive ? "bg-primary/20" : "bg-primary/10",
-        )}
-      >
-        <Icon className="w-6 h-6 text-primary" />
-      </div>
+      <Icon className="w-5 h-5 text-primary mb-2" />
       <h3 className="text-sm sm:text-base font-semibold text-neutral-900 dark:text-white mb-1">
         {category.label}
       </h3>

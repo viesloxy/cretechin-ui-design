@@ -54,14 +54,14 @@ export default function Accordion({
   };
 
   return (
-    <div className={twMerge("space-y-2 sm:space-y-3", className)}>
+    <div className={twMerge("space-y-3 sm:space-y-4", className)}>
       {items.map((item) => {
         const isOpen = currentOpen.includes(item.id);
         return (
           <div
             key={item.id}
             className={twMerge(
-              "rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-neutral-900 overflow-hidden",
+              "rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-neutral-900 overflow-hidden w-full",
               itemClassName,
             )}
           >
@@ -70,7 +70,7 @@ export default function Accordion({
               onClick={() => handleToggle(item.id)}
               aria-expanded={isOpen}
               aria-controls={`accordion-content-${item.id}`}
-              className="w-full flex items-start gap-3 p-4 sm:p-5 hover:bg-neutral-50 dark:hover:bg-neutral-800/30 transition-colors text-left"
+              className="w-full flex items-start gap-3 px-4 py-4 sm:px-6 sm:py-5 hover:bg-neutral-50 dark:hover:bg-neutral-800/30 transition-colors text-left"
             >
               <div className="flex-1 min-w-0 pr-2">
                 <div className="flex items-start gap-2 flex-wrap">
@@ -99,7 +99,7 @@ export default function Accordion({
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                   className="overflow-hidden"
                 >
-                  <div className="px-4 sm:px-5 pb-4 sm:pb-5 text-sm text-neutral-600 dark:text-white/50 leading-relaxed">
+                  <div className="px-4 sm:px-6 pb-4 sm:pb-5 text-sm text-neutral-600 dark:text-white/50 leading-relaxed break-words">
                     {item.answer}
                   </div>
                 </motion.div>

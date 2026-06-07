@@ -7,6 +7,7 @@ import { Footer } from "@/components/landing-page";
 import { useAuth } from "@/context/AuthContext";
 import {
   HelpHero,
+  HelpSearchBar,
   HelpCategoryGrid,
   HelpFAQList,
   ContactCTA,
@@ -132,10 +133,11 @@ function HelpContent() {
   return (
     <div className="min-h-screen bg-white dark:bg-black flex flex-col">
       <BerandaNavbar />
-      <HelpHero
-        searchQuery={searchQuery}
-        onSearchChange={handleSearchChange}
-        searchResults={realSearchResults}
+      <HelpHero />
+      <HelpSearchBar
+        value={searchQuery}
+        onChange={handleSearchChange}
+        results={realSearchResults}
         onResultClick={handleResultClick}
         onViewAllResults={handleViewAllResults}
         onPopularClick={handlePopularClick}

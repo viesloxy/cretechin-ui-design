@@ -52,7 +52,7 @@ export default function ContactCTA({
   return (
     <section
       aria-labelledby="contact-heading"
-      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 md:py-14"
+      className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14 md:py-16"
     >
       <motion.div
         initial={{ opacity: 0, y: 10 }}
@@ -62,7 +62,7 @@ export default function ContactCTA({
       >
         <h2
           id="contact-heading"
-          className="text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight text-neutral-900 dark:text-white"
+          className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-neutral-900 dark:text-white"
         >
           Masih butuh bantuan?
         </h2>

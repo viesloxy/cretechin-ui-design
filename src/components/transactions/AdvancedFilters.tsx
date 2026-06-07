@@ -1,9 +1,9 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
-import { SlidersHorizontal, X, ChevronDown } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowUpDown, X, ChevronDown, SlidersHorizontal } from "lucide-react";
 import { twMerge } from "tailwind-merge";
-import { useState } from "react";
 import type {
   TransactionTypeFilter,
   TransactionPeriodFilter,
@@ -15,6 +15,10 @@ interface AdvancedFiltersProps {
   onTypeChange: (t: TransactionTypeFilter) => void;
   onPeriodChange: (p: TransactionPeriodFilter) => void;
   onReset: () => void;
+  resultCount: number;
+  totalCount: number;
+  searchQuery: string;
+  onSearchChange: (q: string) => void;
 }
 
 const TYPE_OPTIONS: { value: TransactionTypeFilter; label: string }[] = [
@@ -35,38 +39,160 @@ const PERIOD_OPTIONS: {
   { value: "all", label: "Semua waktu" },
 ];
 
-interface SelectProps {
+interface DropdownProps {
   id: string;
   label: string;
   value: string;
   onChange: (v: string) => void;
   options: { value: string; label: string }[];
+  align?: "left" | "right";
 }
 
-function Select({ id, label, value, onChange, options }: SelectProps) {
+function Dropdown({
+  id,
+  label,
+  value,
+  onChange,
+  options,
+  align = "left",
+}: DropdownProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const currentLabel =
+    options.find((opt) => opt.value === value)?.label ?? label;
+
   return (
-    <div className="space-y-1.5">
-      <label
-        htmlFor={id}
-        className="text-xs font-medium text-neutral-600 dark:text-white/50"
+    <div className="relative" ref={ref}>
+      <button
+        type="button"
+        id={id}
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        onClick={() => setIsOpen((v) => !v)}
+        className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-black/10 dark:border-white/10 bg-white dark:bg-neutral-900 text-sm font-medium text-neutral-700 dark:text-white/80 hover:border-primary transition-colors whitespace-nowrap"
       >
-        {label}
-      </label>
-      <div className="relative">
-        <select
-          id={id}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="w-full appearance-none bg-white dark:bg-neutral-900 border border-black/10 dark:border-white/10 text-neutral-900 dark:text-white rounded-full outline-none focus:border-primary transition-colors px-4 py-2 pr-10 text-sm cursor-pointer"
-        >
-          {options.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" />
-      </div>
+        <SlidersHorizontal className="w-4 h-4 flex-shrink-0" />
+        {currentLabel}
+        <ChevronDown
+          className={twMerge(
+            "w-4 h-4 flex-shrink-0 transition-transform",
+            isOpen && "rotate-180",
+          )}
+        />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -10 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className={twMerge(
+              "absolute mt-2 w-48 bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/5 rounded-xl shadow-lg p-2 z-10",
+              align === "right" ? "right-0" : "left-0",
+            )}
+          >
+            {options.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => {
+                  onChange(option.value);
+                  setIsOpen(false);
+                }}
+                className={twMerge(
+                  "w-full text-left px-4 py-2.5 text-sm rounded-lg transition-colors",
+                  value === option.value
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "text-neutral-700 dark:text-white/80 hover:bg-neutral-100 dark:hover:bg-neutral-800",
+                )}
+              >
+                {option.label}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+interface SortDropdownProps {
+  value: string;
+  onChange: (v: string) => void;
+  options: { value: string; label: string }[];
+}
+
+function SortDropdown({ value, onChange, options }: SortDropdownProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const currentLabel =
+    options.find((opt) => opt.value === value)?.label ?? "Urutkan";
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-black/10 dark:border-white/10 bg-white dark:bg-neutral-900 text-sm font-medium text-neutral-700 dark:text-white/80 hover:border-primary transition-colors whitespace-nowrap"
+      >
+        <ArrowUpDown className="w-4 h-4 flex-shrink-0" />
+        {currentLabel}
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -10 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="absolute right-0 mt-2 w-48 bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/5 rounded-xl shadow-lg p-2 z-10"
+          >
+            {options.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => {
+                  onChange(option.value);
+                  setIsOpen(false);
+                }}
+                className={twMerge(
+                  "w-full text-left px-4 py-2.5 text-sm rounded-lg transition-colors",
+                  value === option.value
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "text-neutral-700 dark:text-white/80 hover:bg-neutral-100 dark:hover:bg-neutral-800",
+                )}
+              >
+                {option.label}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -77,76 +203,74 @@ export default function AdvancedFilters({
   onTypeChange,
   onPeriodChange,
   onReset,
+  resultCount,
+  totalCount,
+  searchQuery,
+  onSearchChange,
 }: AdvancedFiltersProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const isFiltered = type !== "all" || period !== "all";
+  const isFiltered =
+    type !== "all" || period !== "all" || searchQuery.trim() !== "";
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-4 sm:mb-6">
-      <div className="flex items-center justify-end gap-2">
-        <button
-          type="button"
-          onClick={() => setIsOpen((v) => !v)}
-          aria-expanded={isOpen}
-          aria-controls="advanced-filters-panel"
-          className={twMerge(
-            "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors",
-            isOpen || isFiltered
-              ? "bg-primary/10 text-primary"
-              : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-white/70 hover:bg-neutral-200 dark:hover:bg-neutral-700",
-          )}
-        >
-          <SlidersHorizontal className="w-4 h-4" />
-          Filter
-          {isFiltered && (
-            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-          )}
-        </button>
-      </div>
-
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            id="advanced-filters-panel"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className="overflow-hidden"
-          >
-            <div className="mt-3 bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/10 rounded-2xl p-4 sm:p-5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Select
-                  id="filter-type"
-                  label="Tipe Transaksi"
-                  value={type}
-                  onChange={(v) => onTypeChange(v as TransactionTypeFilter)}
-                  options={TYPE_OPTIONS}
-                />
-                <Select
-                  id="filter-period"
-                  label="Periode"
-                  value={period}
-                  onChange={(v) => onPeriodChange(v as TransactionPeriodFilter)}
-                  options={PERIOD_OPTIONS}
-                />
-              </div>
-              {isFiltered && (
-                <div className="flex justify-end mt-4">
-                  <button
-                    type="button"
-                    onClick={onReset}
-                    className="inline-flex items-center gap-1.5 text-xs font-medium text-neutral-500 dark:text-white/40 hover:text-neutral-700 dark:hover:text-white/70 transition-colors"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                    Reset Filter
-                  </button>
-                </div>
+    <section className="bg-white dark:bg-black border-b border-black/5 dark:border-white/5">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 py-4">
+          {/* Left: Type filter + search */}
+          <div className="flex flex-1 items-center gap-2 min-w-0">
+            <Dropdown
+              id="filter-type"
+              label="Semua Tipe"
+              value={type}
+              onChange={(v) => onTypeChange(v as TransactionTypeFilter)}
+              options={TYPE_OPTIONS}
+            />
+            <div className="relative flex-1 max-w-md min-w-0">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => onSearchChange(e.target.value)}
+                placeholder="Cari invoice, nama item..."
+                className="w-full pl-4 pr-10 py-2.5 rounded-full border border-black/10 dark:border-white/10 bg-white dark:bg-neutral-900 text-sm text-neutral-700 dark:text-white/80 placeholder:text-neutral-400 focus:outline-none focus:border-primary transition-colors"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => onSearchChange("")}
+                  aria-label="Hapus pencarian"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 dark:hover:text-white"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               )}
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+          </div>
+
+          {/* Right: result count + sort + reset */}
+          <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+            <span className="hidden sm:inline text-xs sm:text-sm text-neutral-500 dark:text-white/50 whitespace-nowrap">
+              <span className="font-semibold text-neutral-900 dark:text-white">
+                {resultCount}
+              </span>{" "}
+              / {totalCount} transaksi
+            </span>
+            <SortDropdown
+              value={period}
+              onChange={(v) => onPeriodChange(v as TransactionPeriodFilter)}
+              options={PERIOD_OPTIONS}
+            />
+            {isFiltered && (
+              <button
+                type="button"
+                onClick={onReset}
+                className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-full text-xs font-medium text-neutral-500 dark:text-white/40 hover:text-neutral-700 dark:hover:text-white/70 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+              >
+                <X className="w-3.5 h-3.5" />
+                Reset
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

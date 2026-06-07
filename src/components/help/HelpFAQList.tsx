@@ -63,16 +63,16 @@ export default function HelpFAQList({
     <section
       id="faq-section"
       aria-labelledby="faq-heading"
-      className="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-14 md:py-16"
+      className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14 md:py-16"
     >
-      <div className="flex items-end justify-between gap-3 mb-3">
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6 w-full">
         <h2
           id="faq-heading"
-          className="text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight text-neutral-900 dark:text-white"
+          className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-neutral-900 dark:text-white min-w-0 flex-1"
         >
           Pertanyaan Populer
         </h2>
-        <div className="flex items-center gap-1 bg-neutral-100 dark:bg-neutral-800 rounded-full p-1 text-xs font-medium">
+        <div className="flex items-center gap-1 bg-neutral-100 dark:bg-neutral-800 rounded-full p-1 text-xs font-medium flex-shrink-0 self-start sm:self-auto">
           <button
             type="button"
             onClick={() => setSort("popular")}

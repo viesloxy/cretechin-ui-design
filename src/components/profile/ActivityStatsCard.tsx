@@ -81,8 +81,8 @@ export default function ActivityStatsCard({
                 aria-label={`Lihat ${config.label}: ${value}`}
                 className="group block h-full bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/10 rounded-2xl p-4 sm:p-5 transition-all hover:border-primary/40 hover:shadow-md"
               >
-                <div className="flex items-center justify-center w-9 h-9 rounded-full bg-primary/10 text-primary mb-3 transition-colors group-hover:bg-primary group-hover:text-neutral-900">
-                  <Icon className="w-4.5 h-4.5" aria-hidden="true" />
+                <div className="flex items-center justify-center w-9 h-9 mb-3 text-neutral-600 dark:text-white/60 transition-colors group-hover:text-primary">
+                  <Icon className="w-5 h-5" aria-hidden="true" />
                 </div>
                 <p className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white">
                   {value}
