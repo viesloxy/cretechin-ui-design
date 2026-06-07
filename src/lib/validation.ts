@@ -66,6 +66,31 @@ export const validateLoginForm = (data: LoginFormData): Record<string, string> =
   return errors;
 };
 
+// Admin login: stricter password rule (min 8 chars)
+export const validateAdminPassword = (password: string): ValidationResult => {
+  if (!password) return { isValid: false, error: "Password harus diisi" };
+  if (password.length < 8) return { isValid: false, error: "Password minimal 8 karakter" };
+  return { isValid: true };
+};
+
+export const validateAdminOTP = (otp: string): ValidationResult => {
+  if (!otp) return { isValid: false, error: "Kode verifikasi harus diisi" };
+  if (!/^\d{6}$/.test(otp)) {
+    return { isValid: false, error: "Kode verifikasi harus 6 digit angka" };
+  }
+  return { isValid: true };
+};
+
+export interface AdminLoginFormData { email: string; password: string; }
+export const validateAdminLoginForm = (data: AdminLoginFormData): Record<string, string> => {
+  const errors: Record<string, string> = {};
+  const emailResult = validateEmail(data.email);
+  if (!emailResult.isValid && emailResult.error) errors.email = emailResult.error;
+  const passwordResult = validateAdminPassword(data.password);
+  if (!passwordResult.isValid && passwordResult.error) errors.password = passwordResult.error;
+  return errors;
+};
+
 export interface RegisterFormData {
   name: string; email: string; password: string; confirmPassword: string; terms: boolean;
 }

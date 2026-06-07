@@ -4,7 +4,7 @@ export const MOCK_USER_PROFILE: UserProfile = {
   id: "vito-aditya",
   email: "vito@student.unair.ac.id",
   password: "",
-  name: "Vito Aditya",
+  name: "Viesloxy",
   createdAt: "2026-05-20T00:00:00Z",
   joinDate: "2026-05-20T00:00:00Z",
 
