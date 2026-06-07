@@ -4,7 +4,6 @@ import { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Shield } from "lucide-react";
 
 interface AdminAuthLayoutProps {
   children: ReactNode;
@@ -16,7 +15,7 @@ export default function AdminAuthLayout({ children }: AdminAuthLayoutProps) {
       {/* Subtle gradient backdrop */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
         <div className="absolute inset-0 opacity-[0.02] dark:opacity-[0.04]" style={{
           backgroundImage: "radial-gradient(circle, currentColor 1px, transparent 1px)",
           backgroundSize: "24px 24px",
@@ -30,19 +29,8 @@ export default function AdminAuthLayout({ children }: AdminAuthLayoutProps) {
         className="relative w-full max-w-md"
       >
         <div className="bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/5 rounded-2xl p-8 md:p-10 shadow-lg shadow-black/5">
-          {/* Logo + Badge */}
+          {/* Logo + Heading */}
           <div className="flex flex-col items-center gap-4 mb-8">
-            <motion.div
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20"
-            >
-              <Shield className="w-3 h-3 text-orange-500" />
-              <span className="text-[10px] font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400">
-                Admin Area
-              </span>
-            </motion.div>
-
             <Link href="/" className="flex items-center gap-3">
               <div className="relative w-10 h-10">
                 <Image
