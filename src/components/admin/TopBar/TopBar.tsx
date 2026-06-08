@@ -41,7 +41,7 @@ export default function TopBar() {
         </button>
 
         {/* Search - left */}
-        <div className="flex-1 max-w-2xl relative">
+        <div className="w-full max-w-md relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 dark:text-white/40 pointer-events-none" />
           <input
             type="text"
@@ -53,7 +53,7 @@ export default function TopBar() {
         </div>
 
         {/* Right cluster: theme + notif + profile */}
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="ml-auto flex items-center gap-2 flex-shrink-0">
           {/* Theme toggle */}
           <button
             type="button"

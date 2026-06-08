@@ -75,15 +75,15 @@ function DashboardContent() {
   if (!isAdmin) return null;
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 transition-colors duration-300">
+    <div className="min-h-screen flex flex-row bg-neutral-50 dark:bg-neutral-950 transition-colors duration-300">
       <Sidebar />
       <div
-        className={`min-h-screen flex flex-col transition-[padding] duration-300 ${
-          sidebarCollapsed ? "lg:pl-20" : "lg:pl-64"
+        className={`w-full transition-[padding] duration-300 ${
+          sidebarCollapsed ? "lg:pl-4" : "lg:pl-6"
         }`}
       >
         <TopBar />
-        <main className="flex-1 p-4 lg:p-6 xl:p-8 space-y-6 md:space-y-8">
+        <main className="p-4 lg:p-6 xl:p-8 space-y-6 md:space-y-8">
           <DashboardHeader />
           <StatsCards />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

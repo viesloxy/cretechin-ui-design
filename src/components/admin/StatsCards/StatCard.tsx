@@ -99,11 +99,11 @@ export default function StatCard({ data, index }: StatCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
       whileHover={{ y: -2 }}
-      className="bg-white dark:bg-neutral-900 border border-primary/20 dark:border-primary/30 rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-md hover:shadow-primary/5 transition-all"
+      className="bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/10 rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-md transition-all"
     >
       <div className="flex items-start justify-between mb-3">
         <p className="text-sm font-medium text-neutral-500 dark:text-white/50">{data.title}</p>
-        <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+        <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-white flex items-center justify-center flex-shrink-0">
           <Icon className="w-5 h-5 md:w-6 md:h-6" />
         </div>
       </div>

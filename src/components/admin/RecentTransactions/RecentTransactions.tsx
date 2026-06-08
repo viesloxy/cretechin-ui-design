@@ -14,7 +14,7 @@ const statusConfig = {
 
 export default function RecentTransactions() {
   return (
-    <div className="bg-white dark:bg-neutral-900 border border-primary/20 dark:border-primary/30 rounded-2xl p-5 md:p-6 shadow-sm">
+    <div className="bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/10 rounded-2xl p-5 md:p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-base md:text-lg font-semibold text-black dark:text-white">

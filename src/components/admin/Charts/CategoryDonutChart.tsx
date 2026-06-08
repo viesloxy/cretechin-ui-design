@@ -56,7 +56,7 @@ const total = mockCategoryData.reduce((s, c) => s + c.value, 0);
 
 export default function CategoryDonutChart() {
   return (
-    <div className="bg-white dark:bg-neutral-900 border border-primary/20 dark:border-primary/30 rounded-2xl p-5 md:p-6 shadow-sm h-full flex flex-col">
+    <div className="bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/10 rounded-2xl p-5 md:p-6 shadow-sm h-full flex flex-col">
       <div className="mb-4">
         <h3 className="text-lg font-semibold text-black dark:text-white">Kategori Terpopuler</h3>
         <p className="text-xs text-neutral-500 dark:text-white/40 mt-0.5">Distribusi enrollment</p>

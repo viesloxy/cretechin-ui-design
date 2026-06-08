@@ -96,21 +96,15 @@ export default function Sidebar() {
                 relative flex items-center gap-3 px-3 py-3 rounded-xl
                 transition-all duration-300 group
                 ${isActive
-                  ? "bg-primary/10 text-primary"
-                  : "text-neutral-600 dark:text-white/60 hover:bg-black/5 dark:hover:bg-white/5 hover:text-primary"
+                  ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white"
+                  : "text-neutral-600 dark:text-white/60 hover:bg-black/5 dark:hover:bg-white/5"
                 }
                 ${sidebarCollapsed && !isMobile ? "justify-center" : ""}
               `}
             >
-              <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? "text-primary" : ""}`} />
+              <Icon className="w-5 h-5 flex-shrink-0" />
               {(!sidebarCollapsed || isMobile) && (
                 <span className="font-medium whitespace-nowrap text-sm">{item.label}</span>
-              )}
-              {isActive && (
-                <motion.div
-                  className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-7 bg-primary rounded-r-full"
-                  layoutId={`active-indicator-${isMobile ? "mobile" : "desktop"}`}
-                />
               )}
             </Link>
           );
@@ -236,7 +230,7 @@ export default function Sidebar() {
           </span>
         )}
       </Link>
-      {isMobile ? (
+      {isMobile && (
         <button
           type="button"
           onClick={onClose}
@@ -245,31 +239,34 @@ export default function Sidebar() {
         >
           <X className="w-5 h-5 text-neutral-600 dark:text-white/60" />
         </button>
-      ) : (
-        <button
-          type="button"
-          onClick={toggleSidebar}
-          className="p-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-neutral-500 dark:text-white/40 flex-shrink-0"
-          aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          {sidebarCollapsed ? (
-            <ChevronRight className="w-4 h-4" />
-          ) : (
-            <ChevronLeft className="w-4 h-4" />
-          )}
-        </button>
       )}
     </div>
+  );
+
+  const renderDesktopToggle = () => (
+    <button
+      type="button"
+      onClick={toggleSidebar}
+      className="hidden lg:flex absolute -right-3 top-16 -translate-y-1/2 z-50 w-7 h-7 items-center justify-center rounded-full bg-white dark:bg-neutral-900 border border-black/10 dark:border-white/10 shadow-md hover:scale-110 hover:bg-primary hover:text-white hover:border-primary text-neutral-600 dark:text-white/70 transition-all duration-200"
+      aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+    >
+      {sidebarCollapsed ? (
+        <ChevronRight className="w-4 h-4" />
+      ) : (
+        <ChevronLeft className="w-4 h-4" />
+      )}
+    </button>
   );
 
   // SSR / pre-hydrate minimal state
   if (!hydrated) {
     return (
-      <aside className="hidden lg:flex fixed top-0 left-0 h-screen w-64 bg-white dark:bg-neutral-950 border-r border-black/5 dark:border-white/5 z-40 flex-col">
+      <aside className="hidden lg:flex fixed top-0 left-0 h-screen w-64 bg-white dark:bg-neutral-950 border-r border-black/5 dark:border-white/5 z-40 flex-col relative">
         {renderHeader()}
         {renderNav()}
         {renderBottom()}
         {renderProfile()}
+        {renderDesktopToggle()}
       </aside>
     );
   }
@@ -314,7 +311,7 @@ export default function Sidebar() {
       {/* Desktop sidebar */}
       <aside
         className={`
-          hidden lg:flex fixed top-0 left-0 h-screen z-40 flex-col
+          hidden lg:flex fixed top-0 left-0 h-screen z-40 flex-col relative
           bg-white dark:bg-neutral-950
           border-r border-black/5 dark:border-white/5
           transition-[width] duration-300 ease-in-out
@@ -325,6 +322,7 @@ export default function Sidebar() {
         {renderNav()}
         {renderBottom()}
         {renderProfile()}
+        {renderDesktopToggle()}
       </aside>
     </>
   );
