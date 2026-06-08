@@ -3,20 +3,24 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Bell, Menu, LogOut, User, Settings, ChevronDown } from "lucide-react";
+import { Search, Bell, Menu, LogOut, User, Settings, ChevronDown, Sun, Moon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAdmin } from "@/context/AdminContext";
 import { useAuth } from "@/context/AuthContext";
+import { useTheme } from "@/components/providers/ThemeProvider";
+
+const AVATAR_SRC = "/images/avatar-3.jpeg";
 
 export default function TopBar() {
   const router = useRouter();
   const { setMobileSidebarOpen } = useAdmin();
   const { adminSession, adminLogout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [profileOpen, setProfileOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
 
-  const initials = adminSession?.name?.charAt(0).toUpperCase() ?? "A";
+  const displayName = adminSession?.name ?? "Admin";
 
   const handleLogout = () => {
     adminLogout();
@@ -36,7 +40,7 @@ export default function TopBar() {
           <Menu className="w-5 h-5 text-neutral-600 dark:text-white/60" />
         </button>
 
-        {/* Search */}
+        {/* Search - left */}
         <div className="flex-1 max-w-2xl relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 dark:text-white/40 pointer-events-none" />
           <input
@@ -48,148 +52,182 @@ export default function TopBar() {
           />
         </div>
 
-        <div className="flex-1 lg:flex-none" />
-
-        {/* Notification bell */}
-        <div className="relative">
+        {/* Right cluster: theme + notif + profile */}
+        <div className="flex items-center gap-2 flex-shrink-0">
+          {/* Theme toggle */}
           <button
             type="button"
-            onClick={() => {
-              setNotifOpen((v) => !v);
-              setProfileOpen(false);
-            }}
-            className="relative p-2.5 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-            aria-label="Notifications"
+            onClick={toggleTheme}
+            className="relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 bg-black/5 dark:bg-white/10"
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
           >
-            <Bell className="w-5 h-5 text-neutral-600 dark:text-white/60" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary ring-2 ring-white dark:ring-neutral-950" />
+            <div className="relative w-5 h-5">
+              <Sun
+                className={`absolute inset-0 w-5 h-5 transition-all duration-300 ${
+                  theme === "light"
+                    ? "opacity-100 rotate-0 scale-100"
+                    : "opacity-0 rotate-90 scale-0"
+                } text-black`}
+              />
+              <Moon
+                className={`absolute inset-0 w-5 h-5 transition-all duration-300 ${
+                  theme === "dark"
+                    ? "opacity-100 rotate-0 scale-100"
+                    : "opacity-0 -rotate-90 scale-0"
+                } text-white`}
+              />
+            </div>
           </button>
-          <AnimatePresence>
-            {notifOpen && (
-              <>
-                <div
-                  className="fixed inset-0 z-40"
-                  onClick={() => setNotifOpen(false)}
-                  aria-hidden
-                />
-                <motion.div
-                  initial={{ opacity: 0, y: -8, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -8, scale: 0.95 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/5 rounded-2xl shadow-lg shadow-black/10 z-50 overflow-hidden"
-                >
-                  <div className="px-4 py-3 border-b border-black/5 dark:border-white/5 flex items-center justify-between">
-                    <h3 className="font-semibold text-sm text-black dark:text-white">Notifikasi</h3>
-                    <span className="text-xs text-primary font-medium">3 baru</span>
-                  </div>
-                  <div className="max-h-80 overflow-y-auto">
-                    {[
-                      { title: "Kursus baru menunggu review", time: "5 menit lalu" },
-                      { title: "Pembayaran masuk Rp 350.000", time: "1 jam lalu" },
-                      { title: "User baru mendaftar", time: "2 jam lalu" },
-                    ].map((n, i) => (
-                      <div
-                        key={i}
-                        className="px-4 py-3 hover:bg-black/5 dark:hover:bg-white/5 border-b border-black/5 dark:border-white/5 last:border-0 cursor-pointer"
-                      >
-                        <p className="text-sm font-medium text-black dark:text-white">{n.title}</p>
-                        <p className="text-xs text-neutral-500 dark:text-white/40 mt-0.5">{n.time}</p>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              </>
-            )}
-          </AnimatePresence>
-        </div>
 
-        {/* Profile dropdown */}
-        <div className="relative">
-          <button
-            type="button"
-            onClick={() => {
-              setProfileOpen((v) => !v);
-              setNotifOpen(false);
-            }}
-            className="flex items-center gap-2 p-1 pr-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-            aria-label="Profile menu"
-          >
-            <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-primary/10">
-              {adminSession?.avatarUrl ? (
+          {/* Notification bell */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => {
+                setNotifOpen((v) => !v);
+                setProfileOpen(false);
+              }}
+              className="relative p-2.5 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+              aria-label="Notifications"
+            >
+              <Bell className="w-5 h-5 text-neutral-600 dark:text-white/60" />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary ring-2 ring-white dark:ring-neutral-950" />
+            </button>
+            <AnimatePresence>
+              {notifOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setNotifOpen(false)}
+                    aria-hidden
+                  />
+                  <motion.div
+                    initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/5 rounded-2xl shadow-lg shadow-black/10 z-50 overflow-hidden"
+                  >
+                    <div className="px-4 py-3 border-b border-black/5 dark:border-white/5 flex items-center justify-between">
+                      <h3 className="font-semibold text-sm text-black dark:text-white">Notifikasi</h3>
+                      <span className="text-xs text-primary font-medium">3 baru</span>
+                    </div>
+                    <div className="max-h-80 overflow-y-auto">
+                      {[
+                        { title: "Kursus baru menunggu review", time: "5 menit lalu" },
+                        { title: "Pembayaran masuk Rp 350.000", time: "1 jam lalu" },
+                        { title: "User baru mendaftar", time: "2 jam lalu" },
+                      ].map((n, i) => (
+                        <div
+                          key={i}
+                          className="px-4 py-3 hover:bg-black/5 dark:hover:bg-white/5 border-b border-black/5 dark:border-white/5 last:border-0 cursor-pointer"
+                        >
+                          <p className="text-sm font-medium text-black dark:text-white">{n.title}</p>
+                          <p className="text-xs text-neutral-500 dark:text-white/40 mt-0.5">{n.time}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Profile dropdown */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => {
+                setProfileOpen((v) => !v);
+                setNotifOpen(false);
+              }}
+              className="flex items-center gap-2 p-1.5 pr-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+              aria-label="Profile menu"
+            >
+              <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-primary flex-shrink-0">
                 <Image
-                  src={adminSession.avatarUrl}
-                  alt={adminSession.name}
-                  width={32}
-                  height={32}
+                  src={AVATAR_SRC}
+                  alt={displayName}
+                  width={36}
+                  height={36}
                   className="object-cover w-full h-full"
                 />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-primary font-semibold text-sm">
-                  {initials}
-                </div>
+              </div>
+              <span className="hidden sm:block text-sm font-medium text-neutral-900 dark:text-white">
+                {displayName}
+              </span>
+              <ChevronDown className="hidden sm:block w-4 h-4 text-neutral-500 dark:text-white/40" />
+            </button>
+            <AnimatePresence>
+              {profileOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setProfileOpen(false)}
+                    aria-hidden
+                  />
+                  <motion.div
+                    initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute right-0 mt-2 w-56 bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/5 rounded-2xl shadow-lg shadow-black/10 z-50 overflow-hidden"
+                  >
+                    <div className="px-4 py-3 border-b border-black/5 dark:border-white/5 flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary flex-shrink-0">
+                        <Image
+                          src={AVATAR_SRC}
+                          alt={displayName}
+                          width={40}
+                          height={40}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-semibold text-sm text-black dark:text-white truncate">
+                          {displayName}
+                        </p>
+                        <p className="text-xs text-neutral-500 dark:text-white/40 truncate">
+                          {adminSession?.email ?? "admin@cretechin.id"}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="py-1">
+                      <button
+                        onClick={() => {
+                          setProfileOpen(false);
+                          router.push("/admin/settings");
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-700 dark:text-white/70 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                      >
+                        <User className="w-4 h-4" />
+                        Profil Saya
+                      </button>
+                      <button
+                        onClick={() => {
+                          setProfileOpen(false);
+                          router.push("/admin/settings");
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-700 dark:text-white/70 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                      >
+                        <Settings className="w-4 h-4" />
+                        Pengaturan
+                      </button>
+                    </div>
+                    <div className="border-t border-black/5 dark:border-white/5 py-1">
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-expense hover:bg-expense/10 transition-colors"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        Keluar
+                      </button>
+                    </div>
+                  </motion.div>
+                </>
               )}
-            </div>
-            <ChevronDown className="w-4 h-4 text-neutral-500 dark:text-white/40 hidden sm:block" />
-          </button>
-          <AnimatePresence>
-            {profileOpen && (
-              <>
-                <div
-                  className="fixed inset-0 z-40"
-                  onClick={() => setProfileOpen(false)}
-                  aria-hidden
-                />
-                <motion.div
-                  initial={{ opacity: 0, y: -8, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -8, scale: 0.95 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute right-0 mt-2 w-56 bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/5 rounded-2xl shadow-lg shadow-black/10 z-50 overflow-hidden"
-                >
-                  <div className="px-4 py-3 border-b border-black/5 dark:border-white/5">
-                    <p className="font-semibold text-sm text-black dark:text-white truncate">
-                      {adminSession?.name ?? "Admin"}
-                    </p>
-                    <p className="text-xs text-neutral-500 dark:text-white/40 truncate">
-                      {adminSession?.email ?? "admin@cretechin.id"}
-                    </p>
-                  </div>
-                  <div className="py-1">
-                    <button
-                      onClick={() => {
-                        setProfileOpen(false);
-                        router.push("/admin/settings");
-                      }}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-700 dark:text-white/70 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-                    >
-                      <User className="w-4 h-4" />
-                      Profil Saya
-                    </button>
-                    <button
-                      onClick={() => {
-                        setProfileOpen(false);
-                        router.push("/admin/settings");
-                      }}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-700 dark:text-white/70 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-                    >
-                      <Settings className="w-4 h-4" />
-                      Pengaturan
-                    </button>
-                  </div>
-                  <div className="border-t border-black/5 dark:border-white/5 py-1">
-                    <button
-                      onClick={handleLogout}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-expense hover:bg-expense/10 transition-colors"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      Keluar
-                    </button>
-                  </div>
-                </motion.div>
-              </>
-            )}
-          </AnimatePresence>
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </header>

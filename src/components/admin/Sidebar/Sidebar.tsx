@@ -40,6 +40,8 @@ const mainNavItems: NavItem[] = [
   { label: "Kelola Transaksi", href: "/admin/transactions", icon: Receipt, matchKey: "transactions" },
 ];
 
+const AVATAR_SRC = "/images/avatar-3.jpeg";
+
 const bottomNavItems: NavItem[] = [
   { label: "Notifications", href: "/admin/notifications", icon: Bell, matchKey: "notifications" },
   { label: "Settings", href: "/admin/settings", icon: Settings, matchKey: "settings" },
@@ -171,20 +173,14 @@ export default function Sidebar() {
     if (sidebarCollapsed && !isMobile) {
       return (
         <div className="border-t border-black/5 dark:border-white/5 p-3 flex justify-center">
-          <div className="w-10 h-10 rounded-full overflow-hidden bg-primary/10 flex-shrink-0">
-            {adminSession?.avatarUrl ? (
-              <Image
-                src={adminSession.avatarUrl}
-                alt={adminSession.name}
-                width={40}
-                height={40}
-                className="object-cover w-full h-full"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-primary font-semibold">
-                {adminSession?.name?.charAt(0).toUpperCase() ?? "A"}
-              </div>
-            )}
+          <div className="w-10 h-10 rounded-full overflow-hidden bg-primary/10 flex-shrink-0 border-2 border-primary">
+            <Image
+              src={AVATAR_SRC}
+              alt={adminSession?.name ?? "Admin"}
+              width={40}
+              height={40}
+              className="object-cover w-full h-full"
+            />
           </div>
         </div>
       );
@@ -192,20 +188,14 @@ export default function Sidebar() {
     return (
       <div className="border-t border-black/5 dark:border-white/5 p-3">
         <div className="flex items-center gap-3 p-2 rounded-xl bg-black/5 dark:bg-white/5">
-          <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-primary/10">
-            {adminSession?.avatarUrl ? (
-              <Image
-                src={adminSession.avatarUrl}
-                alt={adminSession.name}
-                width={40}
-                height={40}
-                className="object-cover w-full h-full"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-primary font-semibold">
-                {adminSession?.name?.charAt(0).toUpperCase() ?? "A"}
-              </div>
-            )}
+          <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border-2 border-primary">
+            <Image
+              src={AVATAR_SRC}
+              alt={adminSession?.name ?? "Admin"}
+              width={40}
+              height={40}
+              className="object-cover w-full h-full"
+            />
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-xs text-neutral-500 dark:text-white/40">Welcome back</p>

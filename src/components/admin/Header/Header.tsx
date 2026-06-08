@@ -20,71 +20,77 @@ export default function DashboardHeader() {
   const currentLabel = periodOptions.find((p) => p.value === period)?.label ?? "30 Hari";
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-      <div>
-        <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-primary">
-          Dashboard Overview
-        </h1>
-        <p className="text-sm md:text-base text-neutral-500 dark:text-white/40 mt-1">
-          Ringkasan performa platform CreTechin
-        </p>
-        <p className="text-xs text-neutral-400 dark:text-white/30 mt-2 flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-          Diperbarui {lastUpdated.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })} yang lalu
-        </p>
-      </div>
+    <section className="py-8 md:py-10 bg-gradient-to-br from-primary/5 to-transparent border-b border-black/5 dark:border-white/5 -mt-4 lg:-mt-6 xl:-mt-8 -mx-4 lg:-mx-6 xl:-mx-8 px-4 lg:px-6 xl:px-8">
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-medium tracking-tight text-black dark:text-white">
+            Dashboard Overview
+          </h1>
+          <p className="text-base max-w-2xl text-neutral-600 dark:text-white/50 mt-3">
+            Ringkasan performa platform CreTechin
+          </p>
+          <p className="text-xs text-neutral-500 dark:text-white/40 mt-3 flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+            Diperbarui {lastUpdated.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })} yang lalu
+          </p>
+        </motion.div>
 
-      <div className="flex items-center gap-2">
-        {/* Period filter */}
-        <div className="relative">
+        <div className="flex items-center gap-2">
+          {/* Period filter */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setOpen((v) => !v)}
+              className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/5 rounded-full text-sm font-medium text-neutral-700 dark:text-white/70 hover:border-primary/30 transition-colors"
+            >
+              <Calendar className="w-4 h-4 text-neutral-500" />
+              {currentLabel}
+              <ChevronDown className={`w-4 h-4 text-neutral-500 transition-transform ${open ? "rotate-180" : ""}`} />
+            </button>
+            <AnimatePresence>
+              {open && (
+                <>
+                  <div className="fixed inset-0 z-30" onClick={() => setOpen(false)} aria-hidden />
+                  <motion.div
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute right-0 sm:left-0 mt-2 w-44 bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/5 rounded-xl shadow-lg z-40 overflow-hidden"
+                  >
+                    {periodOptions.map((opt) => (
+                      <button
+                        key={opt.value}
+                        onClick={() => {
+                          setPeriod(opt.value);
+                          setOpen(false);
+                        }}
+                        className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-neutral-700 dark:text-white/70 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                      >
+                        {opt.label}
+                        {period === opt.value && <Check className="w-4 h-4 text-primary" />}
+                      </button>
+                    ))}
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Export */}
           <button
             type="button"
-            onClick={() => setOpen((v) => !v)}
-            className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/5 rounded-full text-sm font-medium text-neutral-700 dark:text-white/70 hover:border-primary/30 transition-colors"
+            className="flex items-center gap-2 px-4 py-2.5 bg-primary text-neutral-900 font-semibold rounded-full text-sm hover:shadow-lg hover:shadow-primary/30 transition-all"
           >
-            <Calendar className="w-4 h-4 text-neutral-500" />
-            {currentLabel}
-            <ChevronDown className={`w-4 h-4 text-neutral-500 transition-transform ${open ? "rotate-180" : ""}`} />
+            <Download className="w-4 h-4" />
+            <span className="hidden sm:inline">Export Laporan</span>
           </button>
-          <AnimatePresence>
-            {open && (
-              <>
-                <div className="fixed inset-0 z-30" onClick={() => setOpen(false)} aria-hidden />
-                <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute right-0 sm:left-0 mt-2 w-44 bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/5 rounded-xl shadow-lg z-40 overflow-hidden"
-                >
-                  {periodOptions.map((opt) => (
-                    <button
-                      key={opt.value}
-                      onClick={() => {
-                        setPeriod(opt.value);
-                        setOpen(false);
-                      }}
-                      className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-neutral-700 dark:text-white/70 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-                    >
-                      {opt.label}
-                      {period === opt.value && <Check className="w-4 h-4 text-primary" />}
-                    </button>
-                  ))}
-                </motion.div>
-              </>
-            )}
-          </AnimatePresence>
         </div>
-
-        {/* Export */}
-        <button
-          type="button"
-          className="flex items-center gap-2 px-4 py-2.5 bg-primary text-neutral-900 font-semibold rounded-full text-sm hover:shadow-lg hover:shadow-primary/30 transition-all"
-        >
-          <Download className="w-4 h-4" />
-          <span className="hidden sm:inline">Export Laporan</span>
-        </button>
       </div>
-    </div>
+    </section>
   );
 }
